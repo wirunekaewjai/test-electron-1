@@ -1,4 +1,5 @@
-const { app, ipcMain, BrowserWindow } = require('electron');
+import { app, ipcMain, BrowserWindow } from 'electron';
+import * as path from 'path';
 
 function createWindow () {
   const mainWindow = new BrowserWindow({
@@ -9,18 +10,17 @@ function createWindow () {
     },
   });
 
-  mainWindow.loadFile('src/page-1.html');
+  mainWindow.loadFile(path.join(__dirname, '../pages/page-1.html'));
 
-  let childWindow;
+  let childWindow: BrowserWindow;
 
-  ipcMain.on('request-answer', (ev, id) => {
+  ipcMain.on('request-answer', (ev, id: string) => {
     if (!childWindow || childWindow.isDestroyed())
     {
       childWindow = new BrowserWindow({
         show: true,
         width: 640,
         height: 480,
-        // parent: mainWindow,
         webPreferences: {
           nodeIntegration: true,
         },
@@ -31,7 +31,7 @@ function createWindow () {
         childWindow.webContents.send('request-answer', id);
       });
 
-      childWindow.loadFile('src/page-2.html');
+      childWindow.loadFile(path.join(__dirname, '../pages/page-2.html'));
     }
     else
     {
