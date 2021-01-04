@@ -1,0 +1,23 @@
+{
+  "name": "test-electron-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://wirunekaewjai@github.com/wirunekaewjai/test-electron-1.git"
+  },
+  "keywords": [],
+  "author": "Wirune Kaewjai",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wirunekaewjai/test-electron-1/issues"
+  },
+  "homepage": "https://github.com/wirunekaewjai/test-electron-1#readme",
+  "devDependencies": {
+    "electron": "^11.1.1"
+  }
+}
