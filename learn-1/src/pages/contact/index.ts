@@ -1,6 +1,8 @@
 import { html } from 'htm/preact';
 import { useState } from 'preact/hooks';
 
+import classes from './style';
+
 export default function Page ()
 {
   const [count, setCount] = useState(0);
@@ -10,8 +12,10 @@ export default function Page ()
     setCount(e => e + 1);
   }
 
+  console.log(classes);
+
   return html`
-  <h1>
+  <h1 class="${classes.title}" >
     # Contact
   </h1>
   <button onclick="${onClick}" >
