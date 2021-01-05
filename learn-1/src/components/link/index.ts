@@ -2,6 +2,8 @@ import { ipcRenderer } from 'electron';
 import { html } from 'htm/preact';
 import { Props } from './types';
 
+import classes from './style';
+
 export default function Link ({
   page,
   props,
@@ -17,7 +19,8 @@ export default function Link ({
 
   return html`
   <button
-    onclick="${onClick}"
+    class=${classes.link}
+    onclick=${onClick}
   >
     ${children}
   </button>

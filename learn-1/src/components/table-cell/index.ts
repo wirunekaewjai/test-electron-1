@@ -10,10 +10,13 @@ export default function TableCell ({
 
   align = 'left',
   padding = 'default',
+
+  ...props
 }: Props)
 {
   return html`
   <${component} 
+    ...${props}
     class=${clsx({
       [classes['align-left']]: align === 'left',
       [classes['align-right']]: align === 'right',

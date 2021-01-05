@@ -18,10 +18,10 @@ module-padding-none {
 }
 
 module-padding-default {
-  padding: 8px 16px;
+  padding: 12px 16px;
 }
 
 module-padding-dense {
-  padding: 4px 8px;
+  padding: 6px 8px;
 }
 `;

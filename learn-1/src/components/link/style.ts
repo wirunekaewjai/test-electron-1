@@ -1,5 +1,5 @@
 const names = {
-  "table": "A B C"
+  "link": "i j k l m n"
 };
 
 export default names;

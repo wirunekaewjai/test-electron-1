@@ -5,4 +5,6 @@ export interface Props {
 
   align?: 'left' | 'right';
   padding?: 'none' | 'default' | 'dense';
+
+  width?: number | string;
 }
