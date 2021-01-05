@@ -1,6 +1,6 @@
 const names = {
-  "row": "t u v w x y",
-  "hover": "z"
+  "row": "u v w x y z",
+  "hover": "A"
 };
 
 export default names;

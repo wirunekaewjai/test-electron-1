@@ -1,4 +1,11 @@
 import 'module-alias/register';
 import 'source-map-support/register';
 
-import './router';
+import amplify from './amplify';
+import router from './router';
+
+window.addEventListener('DOMContentLoaded', () =>
+{
+  amplify();
+  router();
+});

@@ -6,7 +6,7 @@ import * as path from 'path';
 
 function createWindow () {
   const mainWindow = new BrowserWindow({
-    width: 800,
+    width: 960,
     height: 600,
     webPreferences: {
       nodeIntegration: true,

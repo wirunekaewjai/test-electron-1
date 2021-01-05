@@ -1,5 +1,5 @@
 const names = {
-  "head": "s"
+  "head": "t"
 };
 
 export default names;

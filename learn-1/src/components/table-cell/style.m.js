@@ -1,8 +1,8 @@
 import css from '@wirunekaewjai/css';
 
 export default css`
-module-cell {
-  
+module-align-center {
+  text-align: center;
 }
 
 module-align-left {

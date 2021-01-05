@@ -9,13 +9,14 @@ button, input, optgroup, select, textarea { font-family: inherit }
 button, input, optgroup, select, textarea { font-size: 100% }
 button, select { text-transform: none }
 small { font-size: 80% }
-.A { border-collapse: collapse }
 .a { border-width: 1px }
-.B { border-color: transparent }
+.A:hover { background-color: rgba(0,0,0, 0.08) }
+.B { border-collapse: collapse }
 .b { border-style: solid }
 .c { border-color: #d9d9d9 }
-.C { width: 100% }
+.C { border-color: transparent }
 .d { border-radius: 8px }
+.D { width: 100% }
 .e { overflow: hidden }
 .f { padding: 8px }
 .i { background-color: transparent }
@@ -24,15 +25,15 @@ small { font-size: 80% }
 .l { cursor: pointer }
 .m { padding: 0 }
 .n:hover { color: cornflowerblue }
-.o { text-align: left }
-.p { text-align: right }
-.q { padding: 12px 16px }
-.r { padding: 6px 8px }
-.s { background-color: rgba(0,0,0, 0.12) }
-.t:not(:last-child), .u:first-child { border-bottom-width: 1px }
-.v:not(:last-child), .w:first-child { border-bottom-style: solid }
-.x:not(:last-child), .y:first-child { border-bottom-color: #d9d9d9 }
-.z:hover { background-color: rgba(0,0,0, 0.08) }
+.o { text-align: center }
+.p { text-align: left }
+.q { text-align: right }
+.r { padding: 12px 16px }
+.s { padding: 6px 8px }
+.t { background-color: rgba(0,0,0, 0.12) }
+.u:not(:last-child), .v:first-child { border-bottom-width: 1px }
+.w:not(:last-child), .x:first-child { border-bottom-style: solid }
+.y:not(:last-child), .z:first-child { border-bottom-color: #d9d9d9 }
 @media screen and (min-width: 768px) {
  .g { padding: 16px 24px }
 }

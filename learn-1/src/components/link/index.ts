@@ -8,6 +8,8 @@ export default function Link ({
   page,
   props,
   children,
+
+  ...rests
 }: Props)
 {
   function onClick (ev: MouseEvent)
@@ -21,6 +23,8 @@ export default function Link ({
   <button
     class=${classes.link}
     onclick=${onClick}
+    
+    ...${rests}
   >
     ${children}
   </button>

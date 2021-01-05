@@ -1,5 +1,5 @@
 const names = {
-  "table": "A B C"
+  "table": "B C D"
 };
 
 export default names;

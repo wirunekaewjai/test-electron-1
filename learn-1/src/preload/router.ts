@@ -9,7 +9,7 @@ function renderRoute (Component: any, props?: any)
   render(html`<${Component} ...${props} />`, document.body);
 }
 
-window.addEventListener('DOMContentLoaded', () =>
+export default function init ()
 {
   renderRoute(PageEntries);
 
@@ -23,4 +23,4 @@ window.addEventListener('DOMContentLoaded', () =>
       renderRoute(PageEntry, props);
     }
   });
-});
+}

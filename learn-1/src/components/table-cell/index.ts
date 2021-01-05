@@ -18,6 +18,7 @@ export default function TableCell ({
   <${component} 
     ...${props}
     class=${clsx({
+      [classes['align-center']]: align === 'center',
       [classes['align-left']]: align === 'left',
       [classes['align-right']]: align === 'right',
       [classes['padding-none']]: padding === 'none',
