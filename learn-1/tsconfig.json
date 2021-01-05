@@ -5,9 +5,9 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "outDir": "dist",
-    "baseUrl": ".",
+    "baseUrl": "."
   },
   "include": [
-    "src/**/*"
+    "src/**/*.ts"
   ]
 }

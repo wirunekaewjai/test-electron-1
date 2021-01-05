@@ -1,4 +1,7 @@
-import { app, BrowserWindow } from 'electron';
+import 'module-alias/register';
+import 'source-map-support/register';
+
+import { app, ipcMain, BrowserWindow } from 'electron';
 import * as path from 'path';
 
 function createWindow () {
@@ -12,7 +15,7 @@ function createWindow () {
   });
 
   mainWindow.loadFile(path.join(__dirname, '../app.html'));
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 }
 
 app.whenReady().then(createWindow);
@@ -28,4 +31,8 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
+});
+
+ipcMain.on('navigate', (ev, page: string, props?: any) => {
+  ev.reply('navigate', page, props);
 });

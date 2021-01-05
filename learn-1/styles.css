@@ -1,1 +1,18 @@
-.a { color: teal }
+*, *::after, *::before { box-sizing: border-box }
+html { -webkit-text-size-adjust: 100% }
+html, button, input, optgroup, select, textarea { line-height: 1.15 }
+body { font-family: 'Sarabun', Helvetica, Arial, sans-serif; background: white }
+body, button, h1, h2, h3, h4, h5, h6, input, optgroup, p, select, textarea { margin: 0 }
+b, strong { font-weight: bolder }
+button, [type='button'], [type='reset'], [type='submit'] { -webkit-appearance: button }
+button, input, optgroup, select, textarea { font-family: inherit }
+button, input, optgroup, select, textarea { font-size: 100% }
+button, select { text-transform: none }
+small { font-size: 80% }
+.a { text-align: left }
+.b { text-align: right }
+.c { padding: 0 }
+.d { padding: 8px 16px }
+.e { padding: 4px 8px }
+.f:hover { background-color: rgba(0,0,0, 0.12) }
+.g { border-collapse: collapse }

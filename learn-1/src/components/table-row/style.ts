@@ -1,5 +1,5 @@
 const names = {
-  "title": "a"
+  "hover": "f"
 };
 
 export default names;

@@ -1,52 +1,26 @@
-import 'module-alias/register';
-import 'source-map-support/register';
-
+import { ipcRenderer } from 'electron';
 import { html, render } from 'htm/preact';
 
-import PageHome from 'src/pages/home';
-import PageContact from 'src/pages/contact';
-import PageAbout from 'src/pages/about';
+import PageEntries from 'src/pages/entries';
+import PageEntry from 'src/pages/entry';
 
-const routes = [
-  {
-    path: '/',
-    component: PageHome,
-  },
-  {
-    path: '/contact',
-    component: PageContact,
-  },
-  {
-    path: '/about',
-    component: PageAbout,
-  },
-];
+function renderRoute (Component: any, props?: any)
+{
+  render(html`<${Component} ...${props} />`, document.body);
+}
 
-window.addEventListener('DOMContentLoaded', () => {
-  const body = document.body;
+window.addEventListener('DOMContentLoaded', () =>
+{
+  renderRoute(PageEntries);
 
-  render(html`<${routes[0].component} />`, body);
-
-  body.addEventListener('click', (ev) => {
-    const target = ev.target as HTMLElement;
-  
-    if (target?.tagName.toUpperCase() === 'A')
+  ipcRenderer.on('navigate', (_, page: string, props?: any) => {
+    if (page === 'entries')
     {
-      const el = target as HTMLAnchorElement;
-      const href = el.getAttribute('href').split('?')[0];
-
-      const route = routes.find(r => r.path === href);
-
-      if (route)
-      {
-        ev.preventDefault();
-  
-        render(html`<${route.component} />`, body);
-      }
-      else if (href.startsWith('/'))
-      {
-        render(html`<${routes[0].component} />`, body);
-      }
+      renderRoute(PageEntries, props);
+    }
+    else if (page === 'entry')
+    {
+      renderRoute(PageEntry, props);
     }
   });
 });
