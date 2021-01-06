@@ -7,11 +7,11 @@ export const onCreateEntry = /* GraphQL */ `
       id
       name
       description
+      createdAt
+      updatedAt
       _version
       _deleted
       _lastChangedAt
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -21,11 +21,11 @@ export const onUpdateEntry = /* GraphQL */ `
       id
       name
       description
+      createdAt
+      updatedAt
       _version
       _deleted
       _lastChangedAt
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -35,11 +35,11 @@ export const onDeleteEntry = /* GraphQL */ `
       id
       name
       description
+      createdAt
+      updatedAt
       _version
       _deleted
       _lastChangedAt
-      createdAt
-      updatedAt
     }
   }
 `;

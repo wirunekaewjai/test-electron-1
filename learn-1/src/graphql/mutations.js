@@ -10,11 +10,11 @@ export const createEntry = /* GraphQL */ `
       id
       name
       description
+      createdAt
+      updatedAt
       _version
       _deleted
       _lastChangedAt
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -27,11 +27,11 @@ export const updateEntry = /* GraphQL */ `
       id
       name
       description
+      createdAt
+      updatedAt
       _version
       _deleted
       _lastChangedAt
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -44,11 +44,11 @@ export const deleteEntry = /* GraphQL */ `
       id
       name
       description
+      createdAt
+      updatedAt
       _version
       _deleted
       _lastChangedAt
-      createdAt
-      updatedAt
     }
   }
 `;

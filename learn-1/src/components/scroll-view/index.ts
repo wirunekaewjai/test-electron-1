@@ -1,4 +1,4 @@
-import { html } from 'htm/react';
+import { html } from 'htm/preact';
 import { Props } from './types';
 
 import classes from './style';

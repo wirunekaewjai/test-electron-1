@@ -18,11 +18,11 @@ export const syncEntries = /* GraphQL */ `
         id
         name
         description
+        createdAt
+        updatedAt
         _version
         _deleted
         _lastChangedAt
-        createdAt
-        updatedAt
       }
       nextToken
       startedAt
@@ -35,11 +35,11 @@ export const getEntry = /* GraphQL */ `
       id
       name
       description
+      createdAt
+      updatedAt
       _version
       _deleted
       _lastChangedAt
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -54,11 +54,11 @@ export const listEntrys = /* GraphQL */ `
         id
         name
         description
+        createdAt
+        updatedAt
         _version
         _deleted
         _lastChangedAt
-        createdAt
-        updatedAt
       }
       nextToken
       startedAt

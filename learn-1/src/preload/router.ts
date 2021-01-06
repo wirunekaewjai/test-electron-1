@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
-import { html } from 'htm/react';
-import { render } from 'react-dom';
+import { html } from 'htm/preact';
+import { render } from 'htm/preact';
 
 import PageEntries from 'src/pages/entries';
 import PageEntry from 'src/pages/entry';

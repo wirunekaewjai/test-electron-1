@@ -1,6 +1,6 @@
-import { html } from 'htm/react';
-import { useState, useEffect } from 'react';
-import { DataStore, OpType } from '@aws-amplify/datastore';
+import { html } from 'htm/preact';
+import { useState, useEffect } from 'preact/hooks';
+import { DataStore, OpType, SortDirection } from '@aws-amplify/datastore';
 import { Entry } from 'src/models';
 
 import Container from 'src/components/container';
@@ -14,9 +14,17 @@ import TableCell from 'src/components/table-cell';
 import ScrollView from 'src/components/scroll-view';
 import Link from 'src/components/link';
 
+const LIMIT = 3;
+
 export default function Page ()
 {
-  const [items, setItems] = useState<Entry[]>(undefined);
+  const [items, setItems] = useState<Entry[]>([]);
+  // const [version, setVersion] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [after, setAfter] = useState<Entry>(undefined);
+  // const [limit, setLimit] = useState(LIMIT);
+  // const [page, setPage] = useState(0);
+  const [more, setMore] = useState(false);
   const [name, setName] = useState('');
 
   function onChange (ev: Event)
@@ -31,6 +39,8 @@ export default function Page ()
 
     await DataStore.save(new Entry({
       name,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     }));
 
     setName('');
@@ -44,26 +54,40 @@ export default function Page ()
     }
   }
 
-  function sort (entries: Entry[])
+  function loadMore ()
   {
-    return entries.sort((a, b) => {
-      return a.id.localeCompare(b.id);
-    });
+    setAfter(items[items.length - 1]);
   }
 
   useEffect(() =>
   {
-    DataStore.query(Entry).then(entries => setItems(sort(entries)));
-  }, []);
+    setLoading(true);
+
+    DataStore
+    .query(Entry, e => {
+      if (!after)
+      {
+        return e;
+      }
+
+      return e.updatedAt('lt', after.updatedAt).id('ne', after.id);
+    }, {
+      sort: s => s.updatedAt(SortDirection.DESCENDING),
+      // page,
+      limit: LIMIT + 1,
+    })
+    .then(entries => {
+      const es = entries.slice(0, LIMIT);
+
+      setItems(e => ([...e, ...es]));
+      setLoading(false);
+      setMore(entries.length === LIMIT + 1);
+    });
+  }, [after, setItems, setLoading, setMore]);
 
   useEffect(() => {
-    const sub = DataStore.observe(Entry).subscribe(async (msg) => {
-      if (msg.opType === OpType.INSERT)
-      {
-        const entries = sort(items.concat(msg.element));
-        setItems(entries);
-      }
-      else if (msg.opType === OpType.UPDATE)
+    const sub1 = DataStore.observe(Entry).subscribe(async (msg) => {
+      if (msg.opType === OpType.UPDATE)
       {
         const entries = items.map(e => {
           if (e.id === msg.element.id)
@@ -83,9 +107,21 @@ export default function Page ()
       }
     });
 
+    const sub2 = items.length > 0 ? DataStore
+    .observe(Entry, e => {
+      return e.updatedAt('gt', items[0].updatedAt);
+    })
+    .subscribe(async (msg) => {
+      if (msg.opType === OpType.INSERT)
+      {
+        setItems(es => ([msg.element,  ...es]));
+      }
+    }) : undefined;
+
     return function ()
     {
-      sub?.unsubscribe();
+      sub1?.unsubscribe();
+      sub2?.unsubscribe();
     }
   }, [items, setItems]);
 
@@ -101,11 +137,14 @@ export default function Page ()
         <${Table} sticky >
           <${TableHead}>
             <${TableRow}>
-              <${TableCell} component="th" width=200 >
-                ID
-              <//>
               <${TableCell} component="th">
                 Name
+              <//>
+              <${TableCell} component="th" width=160 >
+                CreatedAt
+              <//>
+              <${TableCell} component="th" width=160 >
+                UpdatedAt
               <//>
               <${TableCell} component="th" width=10>
                 
@@ -114,16 +153,7 @@ export default function Page ()
           <//>
           <tbody>
             ${
-              !items ?
-              html`
-              <${TableRow}>
-                <${TableCell} align="center" colSpan=3 >
-                  กำลังโหลด . . .
-                <//>
-              <//>
-              `
-              :
-              items.length === 0 ?
+              items.length === 0 && !loading && !more ?
               html`
               <${TableRow}>
                 <${TableCell} align="center" colSpan=3 >
@@ -132,33 +162,74 @@ export default function Page ()
               <//>
               `
               :
-              items.map(item => (
-                html`
-                <${TableRow} hover >
-                  <${TableCell}>
-                    ${item.id}
-                  <//>
-                  <${TableCell}>
-                    <${Link}
-                      page="entry"
-                      props=${{ entryID: item.id }}
-                    >
-                      ${item.name}
+              items.map(item => {
+                const createdAt = new Date(item.createdAt);
+                const updatedAt = new Date(item.updatedAt);
+
+                return (
+                  html`
+                  <${TableRow} key=${item.id} hover >
+                    <${TableCell}>
+                      <${Link}
+                        page="entry"
+                        props=${{ entryID: item.id }}
+                      >
+                        ${item.name}
+                      <//>
+                    <//>
+                    <${TableCell}>
+                      ${createdAt.toLocaleDateString()}
+                      <br />
+                      <small>
+                        ${createdAt.toLocaleTimeString()}
+                      </small>
+                    <//>
+                    <${TableCell}>
+                      ${updatedAt.toLocaleDateString()}
+                      <br />
+                      <small>
+                        ${updatedAt.toLocaleTimeString()}
+                      </small>
+                    <//>
+                    <${TableCell}>
+                      <button onclick=${onDelete(item.id)} >
+                        ลบ
+                      </button>
                     <//>
                   <//>
-                  <${TableCell}>
-                    <button onClick=${onDelete(item.id)} >
-                      ลบ
-                    </button>
-                  <//>
+                  `
+                )
+              })
+            }
+            ${
+              loading ?
+              html`
+              <${TableRow}>
+                <${TableCell} align="center" colSpan=3 >
+                  กำลังโหลด . . .
                 <//>
-                `
-              ))
+              <//>
+              `
+              :
+              html``
             }
           </tbody>
         <//>
       <//>
     <//>
+
+    ${
+      more && !loading ?
+      html`
+      <div>
+        <button onclick=${loadMore} >
+          Load More
+        </button>
+      </div>
+      `
+      :
+      ''
+    }
 
     <!-- Form -->
     ${
@@ -166,11 +237,11 @@ export default function Page ()
       html`
       <br />
       <form
-        onSubmit=${onSubmit}
+        onsubmit=${onSubmit}
       >
         <input
           value=${name}
-          onChange=${onChange}
+          oninput=${onChange}
         />
         <button
           type="submit"

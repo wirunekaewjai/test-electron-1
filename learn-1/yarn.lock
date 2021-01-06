@@ -29,7 +29,7 @@
     "@aws-amplify/api-graphql" "1.2.16"
     "@aws-amplify/api-rest" "1.2.16"
 
-"@aws-amplify/auth@3.4.16":
+"@aws-amplify/auth@3.4.16", "@aws-amplify/auth@^3.4.16":
   version "3.4.16"
   resolved "https://registry.yarnpkg.com/@aws-amplify/auth/-/auth-3.4.16.tgz#0954db6600c9ecc245554d096f85558c0e04102b"
   dependencies:
@@ -3476,6 +3476,10 @@ plist@^3.0.0, plist@^3.0.1:
     base64-js "^1.2.3"
     xmlbuilder "^9.0.7"
     xmldom "0.1.x"
+
+preact@^10.5.9:
+  version "10.5.9"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.5.9.tgz#8caba9288b4db1d593be2317467f8735e43cda0b"
 
 prelude-ls@^1.2.1:
   version "1.2.1"
