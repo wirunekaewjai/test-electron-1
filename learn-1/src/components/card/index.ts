@@ -1,4 +1,4 @@
-import { html } from 'htm/preact';
+import { html } from 'htm/react';
 import { Props } from './types';
 
 import classes from './style';
@@ -9,7 +9,7 @@ export default function Card ({
 }: Props)
 {
   return html`
-  <${component} class=${classes.card} >
+  <${component} className=${classes.card} >
     ${children}
   <//>
   `;

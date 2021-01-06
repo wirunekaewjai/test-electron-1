@@ -1,4 +1,4 @@
-import { html } from 'htm/preact';
+import { html } from 'htm/react';
 import { Props } from './types';
 
 import clsx from 'src/utils/clsx';
@@ -17,7 +17,7 @@ export default function TableCell ({
   return html`
   <${component} 
     ...${props}
-    class=${clsx({
+    className=${clsx({
       [classes['align-center']]: align === 'center',
       [classes['align-left']]: align === 'left',
       [classes['align-right']]: align === 'right',

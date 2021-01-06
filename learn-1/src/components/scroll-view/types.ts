@@ -1,5 +1,7 @@
 
 export interface Props {
+  component?: any;
   children?: any;
-  sticky?: boolean;
+
+  height?: string;
 }

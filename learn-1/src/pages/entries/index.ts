@@ -1,5 +1,5 @@
-import { html } from 'htm/preact';
-import { useState, useEffect } from 'preact/hooks';
+import { html } from 'htm/react';
+import { useState, useEffect } from 'react';
 import { DataStore, OpType } from '@aws-amplify/datastore';
 import { Entry } from 'src/models';
 
@@ -11,6 +11,7 @@ import TableHead from 'src/components/table-head';
 import TableRow from 'src/components/table-row';
 import TableCell from 'src/components/table-cell';
 
+import ScrollView from 'src/components/scroll-view';
 import Link from 'src/components/link';
 
 export default function Page ()
@@ -96,64 +97,66 @@ export default function Page ()
 
     <!-- Table -->
     <${Card}>
-      <${Table}>
-        <${TableHead}>
-          <${TableRow}>
-            <${TableCell} component="th" width=200 >
-              ID
-            <//>
-            <${TableCell} component="th">
-              Name
-            <//>
-            <${TableCell} component="th" width=10>
-              
+      <${ScrollView} height=300px >
+        <${Table} sticky >
+          <${TableHead}>
+            <${TableRow}>
+              <${TableCell} component="th" width=200 >
+                ID
+              <//>
+              <${TableCell} component="th">
+                Name
+              <//>
+              <${TableCell} component="th" width=10>
+                
+              <//>
             <//>
           <//>
-        <//>
-        <tbody>
-          ${
-            !items ?
-            html`
-            <${TableRow}>
-              <${TableCell} align="center" colspan=3 >
-                กำลังโหลด . . .
-              <//>
-            <//>
-            `
-            :
-            items.length === 0 ?
-            html`
-            <${TableRow}>
-              <${TableCell} align="center" colspan=3 >
-                ไม่มีข้อมูล
-              <//>
-            <//>
-            `
-            :
-            items.map(item => (
+          <tbody>
+            ${
+              !items ?
               html`
-              <${TableRow} hover >
-                <${TableCell}>
-                  ${item.id}
-                <//>
-                <${TableCell}>
-                  <${Link}
-                    page="entry"
-                    props=${{ entryID: item.id }}
-                  >
-                    ${item.name}
-                  <//>
-                <//>
-                <${TableCell}>
-                  <button onclick=${onDelete(item.id)} >
-                    ลบ
-                  </button>
+              <${TableRow}>
+                <${TableCell} align="center" colSpan=3 >
+                  กำลังโหลด . . .
                 <//>
               <//>
               `
-            ))
-          }
-        </tbody>
+              :
+              items.length === 0 ?
+              html`
+              <${TableRow}>
+                <${TableCell} align="center" colSpan=3 >
+                  ไม่มีข้อมูล
+                <//>
+              <//>
+              `
+              :
+              items.map(item => (
+                html`
+                <${TableRow} hover >
+                  <${TableCell}>
+                    ${item.id}
+                  <//>
+                  <${TableCell}>
+                    <${Link}
+                      page="entry"
+                      props=${{ entryID: item.id }}
+                    >
+                      ${item.name}
+                    <//>
+                  <//>
+                  <${TableCell}>
+                    <button onClick=${onDelete(item.id)} >
+                      ลบ
+                    </button>
+                  <//>
+                <//>
+                `
+              ))
+            }
+          </tbody>
+        <//>
       <//>
     <//>
 
@@ -163,11 +166,11 @@ export default function Page ()
       html`
       <br />
       <form
-        onsubmit=${onSubmit}
+        onSubmit=${onSubmit}
       >
         <input
           value=${name}
-          oninput=${onChange}
+          onChange=${onChange}
         />
         <button
           type="submit"

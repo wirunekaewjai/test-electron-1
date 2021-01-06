@@ -3,15 +3,19 @@ import { Props } from './types';
 
 import classes from './style';
 
-export default function Container ({
+export default function ScrollView ({
+  component = 'div',
   children,
+
+  height = '100%',
 }: Props)
 {
   return html`
-  <main 
-    className=${classes.container}
+  <${component}
+    className=${classes.scrollview}
+    style=${{ height }}
   >
     ${children}
-  </main>
+  <//>
   `;
 }

@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
-import { html } from 'htm/preact';
-import { useState, useEffect } from 'preact/hooks';
+import { html } from 'htm/react';
+import { useState, useEffect } from 'react';
 import { DataStore, OpType } from '@aws-amplify/datastore';
 import { Entry } from 'src/models';
 
@@ -90,7 +90,7 @@ export default function Page ({
         <input
           name="name"
           value=${entry.name}
-          oninput=${onChange}
+          onChange=${onChange}
         />
       </div>
       <div>
@@ -98,11 +98,11 @@ export default function Page ({
         <input
           name="description"
           value=${entry.description ?? ''}
-          oninput=${onChange}
+          onChange=${onChange}
         />
       </div>
       <div>
-        <button onclick=${onSave} disabled=${saving} >
+        <button onClick=${onSave} disabled=${saving} >
           ${saving ? 'กำลังบันทึก' : 'บันทึก'}
         </button>
       </div>

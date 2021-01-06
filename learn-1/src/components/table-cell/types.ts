@@ -8,6 +8,6 @@ export interface Props {
 
   width?: number | string;
 
-  colspan?: number;
+  colSpan?: number;
   rowspan?: number;
 }

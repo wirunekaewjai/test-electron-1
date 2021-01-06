@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-import { html } from 'htm/preact';
+import { html } from 'htm/react';
 import { Props } from './types';
 
 import classes from './style';
@@ -21,8 +21,8 @@ export default function Link ({
 
   return html`
   <button
-    class=${classes.link}
-    onclick=${onClick}
+    className=${classes.link}
+    onClick=${onClick}
     
     ...${rests}
   >

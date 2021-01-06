@@ -1,5 +1,5 @@
 const names = {
-  "head": "u"
+  "scrollview": "o"
 };
 
 export default names;

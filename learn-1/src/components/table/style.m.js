@@ -7,4 +7,9 @@ module-table {
 
   width: 100%;
 }
+
+module-sticky thead > tr > th {
+  position: sticky;
+  top: 0;
+}
 `;

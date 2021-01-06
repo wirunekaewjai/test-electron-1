@@ -1,10 +1,10 @@
 const names = {
-  "align-center": "o",
-  "align-left": "p",
-  "align-right": "q",
+  "align-center": "p",
+  "align-left": "q",
+  "align-right": "r",
   "padding-none": "m",
-  "padding-default": "r",
-  "padding-dense": "s"
+  "padding-default": "s",
+  "padding-dense": "t"
 };
 
 export default names;

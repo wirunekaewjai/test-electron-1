@@ -1,4 +1,4 @@
-import { html } from 'htm/preact';
+import { html } from 'htm/react';
 import { Props } from './types';
 
 import classes from './style';
@@ -9,7 +9,7 @@ export default function TableRow ({
 {
   return html`
   <thead 
-    class=${classes.head}
+    className=${classes.head}
   >
     ${children}
   </thead>

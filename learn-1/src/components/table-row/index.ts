@@ -1,4 +1,4 @@
-import { html } from 'htm/preact';
+import { html } from 'htm/react';
 import { Props } from './types';
 
 import clsx from 'src/utils/clsx';
@@ -11,7 +11,7 @@ export default function TableRow ({
 {
   return html`
   <tr 
-    class=${clsx(classes.row, {
+    className=${clsx(classes.row, {
       [classes['hover']]: hover,
     })}
   >

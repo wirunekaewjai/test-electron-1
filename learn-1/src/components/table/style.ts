@@ -1,5 +1,6 @@
 const names = {
-  "table": "B C D"
+  "table": "C D E",
+  "sticky": "F G"
 };
 
 export default names;
