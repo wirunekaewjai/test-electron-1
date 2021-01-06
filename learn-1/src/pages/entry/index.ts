@@ -1,6 +1,7 @@
 import { ipcRenderer } from 'electron';
 import { html } from 'htm/preact';
 import { useState, useEffect } from 'preact/hooks';
+import { Auth } from '@aws-amplify/auth';
 import { DataStore, OpType } from '@aws-amplify/datastore';
 import { Entry } from 'src/models';
 
@@ -34,6 +35,7 @@ export default function Page ({
       Entry.copyOf(src, updated => {
         updated.name = entry.name;
         updated.description = entry.description;
+        updated.updatedAt = new Date().toISOString();
       })
     );
 
@@ -46,6 +48,12 @@ export default function Page ({
     }
 
     setSaving(false);
+  }
+
+  async function signOut ()
+  {
+    await Auth.signOut();
+    ipcRenderer.send('navigate', 'entries');
   }
 
   useEffect(() =>
@@ -112,6 +120,11 @@ export default function Page ({
     <${Link} page="entries" disabled=${saving} >
       Back
     <//>
+
+    <hr />
+    <button onClick=${signOut} >
+      Sign Out
+    </button>
   <//>
   `;
 }

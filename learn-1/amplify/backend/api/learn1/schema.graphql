@@ -1,4 +1,22 @@
-type Entry @model {
+type Entry @model @auth(
+  rules: [
+    {
+      allow: groups,
+      groups: [
+        "Admin",
+        "Editor"
+      ],
+      operations: [update]
+    },
+    {
+      allow: groups,
+      groups: [
+        "Admin"
+      ],
+      operations: [create, delete]
+    }
+  ]
+) {
   id: ID!
   name: String!
   description: String

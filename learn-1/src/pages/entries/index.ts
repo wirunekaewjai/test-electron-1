@@ -1,5 +1,7 @@
+import { ipcRenderer } from 'electron';
 import { html } from 'htm/preact';
 import { useState, useEffect } from 'preact/hooks';
+import { Auth } from '@aws-amplify/auth';
 import { DataStore, OpType, SortDirection } from '@aws-amplify/datastore';
 import { Entry } from 'src/models';
 
@@ -14,16 +16,15 @@ import TableCell from 'src/components/table-cell';
 import ScrollView from 'src/components/scroll-view';
 import Link from 'src/components/link';
 
+import { Props } from './types';
+
 const LIMIT = 3;
 
-export default function Page ()
+export default function Page ({ groups }: Props)
 {
   const [items, setItems] = useState<Entry[]>([]);
-  // const [version, setVersion] = useState(0);
   const [loading, setLoading] = useState(true);
   const [after, setAfter] = useState<Entry>(undefined);
-  // const [limit, setLimit] = useState(LIMIT);
-  // const [page, setPage] = useState(0);
   const [more, setMore] = useState(false);
   const [name, setName] = useState('');
 
@@ -36,7 +37,7 @@ export default function Page ()
   async function onSubmit (ev: Event)
   {
     ev.preventDefault();
-
+    
     await DataStore.save(new Entry({
       name,
       createdAt: new Date().toISOString(),
@@ -45,7 +46,7 @@ export default function Page ()
 
     setName('');
   }
-
+  
   function onDelete (id: string)
   {
     return async function handler ()
@@ -57,6 +58,14 @@ export default function Page ()
   function loadMore ()
   {
     setAfter(items[items.length - 1]);
+  }
+
+  async function signOut ()
+  {
+    await DataStore.clear();
+    await Auth.signOut();
+
+    ipcRenderer.send('navigate', 'entries');
   }
 
   useEffect(() =>
@@ -73,7 +82,6 @@ export default function Page ()
       return e.updatedAt('lt', after.updatedAt).id('ne', after.id);
     }, {
       sort: s => s.updatedAt(SortDirection.DESCENDING),
-      // page,
       limit: LIMIT + 1,
     })
     .then(entries => {
@@ -156,7 +164,7 @@ export default function Page ()
               items.length === 0 && !loading && !more ?
               html`
               <${TableRow}>
-                <${TableCell} align="center" colSpan=3 >
+                <${TableCell} align="center" colSpan=4 >
                   ไม่มีข้อมูล
                 <//>
               <//>
@@ -192,9 +200,16 @@ export default function Page ()
                       </small>
                     <//>
                     <${TableCell}>
-                      <button onclick=${onDelete(item.id)} >
-                        ลบ
-                      </button>
+                      ${
+                        groups.includes('Admin') ?
+                        html`
+                        <button onclick=${onDelete(item.id)} >
+                          ลบ
+                        </button>
+                        `
+                        :
+                        null
+                      }
                     <//>
                   <//>
                   `
@@ -205,7 +220,7 @@ export default function Page ()
               loading ?
               html`
               <${TableRow}>
-                <${TableCell} align="center" colSpan=3 >
+                <${TableCell} align="center" colSpan=4 >
                   กำลังโหลด . . .
                 <//>
               <//>
@@ -233,7 +248,7 @@ export default function Page ()
 
     <!-- Form -->
     ${
-      items ?
+      items && groups.includes('Admin') ?
       html`
       <br />
       <form
@@ -253,6 +268,11 @@ export default function Page ()
       :
       ''
     }
+
+    <hr />
+    <button onClick=${signOut} >
+      Sign Out
+    </button>
   <//>
   `;
 }
