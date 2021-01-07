@@ -1,0 +1,33 @@
+How to start an Electron + Vue + Typescript project
+There were some problems in getting started, because the three projects evolved pretty rapidly in the last few months. Thus many posts or tutorials were already outdated, as well as popular templated like https://github.com/SimulatedGREG/electron-vue.
+
+install Vue CLI
+install Vue CLI with
+
+$ npm install -g @vue/cli
+
+create a new Project
+create a Vue project with your project_name
+
+$ vue create project_name
+
+You can now choose between a default plugin preset, or choose manually the ones you need. You can always install missing plugins later, if you are unsure of your needs.
+
+Vue CLI v3.5.5
+? Please pick a preset: default (babel, eslint)
+
+install plugin electron-builder
+go to the project folder, and install electron-builder with
+
+$ vue add electron-builder
+
+add Typescript support
+add typescript support
+
+$ vue add @vue/typescript
+
+That’s it!
+you can now run the electron app via
+
+$ npm run electron:serve
+
