@@ -1,4 +1,6 @@
-type Entry @model @auth(
+type Entry
+  @model
+  @auth(
   rules: [
     {
       allow: groups,
