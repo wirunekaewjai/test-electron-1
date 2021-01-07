@@ -1,6 +1,6 @@
 <template>
-  <button v-on:click="click" >
-    {{ message }}
+  <button v-on:click.prevent="click" >
+    <slot></slot>
   </button>
 </template>
 

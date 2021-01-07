@@ -1,6 +1,7 @@
 import Vue from 'vue';
 
 export default Vue.extend({
+  name: 'wk-link',
   props: {
     page: {
       type: String,
@@ -10,11 +11,9 @@ export default Vue.extend({
       type: Object,
       required: false,
     },
-    message: String,
   },
   methods: {
-    click: function (ev: MouseEvent) {
-      ev.preventDefault();
+    click: function () {
       window.ipcRenderer.send('navigate', this.page, this.props);
     },
   },

@@ -82,6 +82,10 @@ if (isDevelopment) {
   }
 }
 
+ipcMain.on('set', (ev, key: string, value: any) => {
+  ev.reply('set', key, value);
+});
+
 ipcMain.on('navigate', (ev, page: string, props?: any) => {
   ev.reply('navigate', page, props);
 });
