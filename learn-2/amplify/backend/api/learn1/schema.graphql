@@ -1,27 +1,154 @@
 type Entry
   @model
   @auth(
-  rules: [
-    {
-      allow: groups,
-      groups: [
-        "Admin",
-        "Editor"
-      ],
-      operations: [update]
-    },
-    {
-      allow: groups,
-      groups: [
-        "Admin"
-      ],
-      operations: [create, delete]
-    }
-  ]
-) {
+    rules: [
+      {
+        allow: private,
+        operations: [read]
+      },
+      {
+        allow: groups,
+        groups: [
+          "Admin",
+          "Editor"
+        ],
+        operations: [update]
+      },
+      {
+        allow: groups,
+        groups: [
+          "Admin"
+        ],
+        operations: [create, delete]
+      }
+    ]
+  )
+{
   id: ID!
   name: String!
   description: String
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
+}
+
+type List
+  @model
+  @auth(
+    rules: [
+      {
+        allow: private,
+        operations: [read]
+      },
+      {
+        allow: owner,
+        ownerField: "owners",
+        operations: [update, delete]
+      },
+    ]
+  )
+{
+  id: ID!
+  name: String!
+  description: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owners: [String!]!
+
+  # items: [Item!]! @connection(keyName: "byList", fields: ["id"])
+}
+
+type Item
+  @model(
+    queries: null
+  )
+  # @key(name: "byList", fields: ["listID", "name", "createdAt", "updatedAt"])
+  @auth(
+    rules: [
+      {
+        allow: private,
+        operations: [read]
+      }
+    ]
+  )
+{
+  id: ID!
+  name: String!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  # listID: ID!
+  # list: List! @connection(fields: ["listID"])
+}
+
+type Query {
+  listItems(filter: ItemFilterInput, limit: Int, nextToken: String): ItemConnection @function(name: "listItems-${env}")
+}
+
+type ItemConnection {
+  items: [Item]
+  nextToken: String
+}
+
+input ItemFilterInput {
+  id: IDInput
+  name: StringInput
+  createdAt: StringInput
+  updatedAt: StringInput
+  and: [ItemFilterInput]
+  or: [ItemFilterInput]
+  not: ItemFilterInput
+}
+
+input IDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: AttributeTypes
+  size: SizeInput
+}
+
+input StringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: AttributeTypes
+  size: SizeInput
+}
+
+input SizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+enum AttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
 }

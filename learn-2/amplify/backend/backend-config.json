@@ -11,7 +11,18 @@
               "userPoolId": "authlearn1da44e1cf"
             }
           },
-          "additionalAuthenticationProviders": []
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "API_KEY",
+              "apiKeyConfig": {
+                "apiKeyExpirationDays": 7,
+                "description": "for public read"
+              }
+            },
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ]
         }
       }
     }
@@ -22,6 +33,22 @@
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
       "customAuth": false
+    }
+  },
+  "function": {
+    "listItems": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "api",
+          "resourceName": "learn1",
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ]
+        }
+      ]
     }
   }
 }
