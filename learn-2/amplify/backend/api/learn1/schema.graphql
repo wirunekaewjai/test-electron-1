@@ -29,73 +29,64 @@ type Entry
   description: String
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
+
+  notes: [Note!]! @connection(keyName: "byEntry", fields: ["id"])
 }
 
-type List
-  @model
-  @auth(
-    rules: [
-      {
-        allow: private,
-        operations: [read]
-      },
-      {
-        allow: owner,
-        ownerField: "owners",
-        operations: [update, delete]
-      },
-    ]
-  )
-{
-  id: ID!
-  name: String!
-  description: String
-  createdAt: AWSDateTime!
-  updatedAt: AWSDateTime!
-  owners: [String!]!
-
-  # items: [Item!]! @connection(keyName: "byList", fields: ["id"])
-}
-
-type Item
+type Note
   @model(
     queries: null
   )
-  # @key(name: "byList", fields: ["listID", "name", "createdAt", "updatedAt"])
+  @key(name: "byEntry", fields: ["entryID", "message", "createdAt", "updatedAt"])
   @auth(
     rules: [
       {
         allow: private,
         operations: [read]
-      }
+      },
+      {
+        allow: groups,
+        groups: [
+          "Admin",
+          "Editor"
+        ],
+        operations: [update]
+      },
+      {
+        allow: groups,
+        groups: [
+          "Admin"
+        ],
+        operations: [create, delete]
+      },
     ]
   )
 {
   id: ID!
-  name: String!
+  message: String!
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
-  # listID: ID!
-  # list: List! @connection(fields: ["listID"])
+  entryID: ID!
+  entry: Entry! @connection(fields: ["entryID"])
 }
 
 type Query {
-  listItems(filter: ItemFilterInput, limit: Int, nextToken: String): ItemConnection @function(name: "listItems-${env}")
+  listNotes(entryID: ID!, filter: NoteFilterInput, limit: Int, nextToken: String): NoteConnection @function(name: "listNotes-${env}")
 }
 
-type ItemConnection {
-  items: [Item]
+type NoteConnection {
+  items: [Note]
   nextToken: String
 }
 
-input ItemFilterInput {
+input NoteFilterInput {
   id: IDInput
   name: StringInput
   createdAt: StringInput
   updatedAt: StringInput
-  and: [ItemFilterInput]
-  or: [ItemFilterInput]
-  not: ItemFilterInput
+  and: [NoteFilterInput]
+  or: [NoteFilterInput]
+  not: NoteFilterInput
 }
 
 input IDInput {

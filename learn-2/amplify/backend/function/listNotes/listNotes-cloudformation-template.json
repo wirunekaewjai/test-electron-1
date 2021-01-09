@@ -10,6 +10,10 @@
     "env": {
       "Type": "String"
     },
+    "authlearn1da44e1cfUserPoolId": {
+      "Type": "String",
+      "Default": "authlearn1da44e1cfUserPoolId"
+    },
     "apilearn1GraphQLAPIIdOutput": {
       "Type": "String",
       "Default": "apilearn1GraphQLAPIIdOutput"
@@ -37,12 +41,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "listItems",
+            "listNotes",
             {
               "Fn::Join": [
                 "",
                 [
-                  "listItems",
+                  "listNotes",
                   "-",
                   {
                     "Ref": "env"
@@ -60,12 +64,15 @@
             "REGION": {
               "Ref": "AWS::Region"
             },
-            "API_LEARN1_ITEMTABLE_NAME": {
+            "AUTH_LEARN1DA44E1CF_USERPOOLID": {
+              "Ref": "authlearn1da44e1cfUserPoolId"
+            },
+            "API_LEARN1_ENTRYTABLE_NAME": {
               "Fn::ImportValue": {
-                "Fn::Sub": "${apilearn1GraphQLAPIIdOutput}:GetAtt:ItemTable:Name"
+                "Fn::Sub": "${apilearn1GraphQLAPIIdOutput}:GetAtt:EntryTable:Name"
               }
             },
-            "API_LEARN1_ITEMTABLE_ARN": {
+            "API_LEARN1_ENTRYTABLE_ARN": {
               "Fn::Join": [
                 "",
                 [
@@ -80,7 +87,7 @@
                   ":table/",
                   {
                     "Fn::ImportValue": {
-                      "Fn::Sub": "${apilearn1GraphQLAPIIdOutput}:GetAtt:ItemTable:Name"
+                      "Fn::Sub": "${apilearn1GraphQLAPIIdOutput}:GetAtt:EntryTable:Name"
                     }
                   }
                 ]
@@ -88,6 +95,32 @@
             },
             "API_LEARN1_GRAPHQLAPIIDOUTPUT": {
               "Ref": "apilearn1GraphQLAPIIdOutput"
+            },
+            "API_LEARN1_NOTETABLE_NAME": {
+              "Fn::ImportValue": {
+                "Fn::Sub": "${apilearn1GraphQLAPIIdOutput}:GetAtt:NoteTable:Name"
+              }
+            },
+            "API_LEARN1_NOTETABLE_ARN": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:aws:dynamodb:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":table/",
+                  {
+                    "Fn::ImportValue": {
+                      "Fn::Sub": "${apilearn1GraphQLAPIIdOutput}:GetAtt:NoteTable:Name"
+                    }
+                  }
+                ]
+              ]
             }
           }
         },
@@ -102,7 +135,7 @@
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-learn1-dev-135712-deployment",
-          "S3Key": "amplify-builds/listItems-37686b48692b77697a52-build.zip"
+          "S3Key": "amplify-builds/listNotes-43337644514657455575-build.zip"
         }
       }
     },
@@ -112,12 +145,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "learn1LambdaRole1f743888",
+            "learn1LambdaRole279c1d0b",
             {
               "Fn::Join": [
                 "",
                 [
-                  "learn1LambdaRole1f743888",
+                  "learn1LambdaRole279c1d0b",
                   "-",
                   {
                     "Ref": "env"
@@ -206,6 +239,46 @@
             {
               "Effect": "Allow",
               "Action": [
+                "cognito-identity:Describe*",
+                "cognito-identity:Get*",
+                "cognito-identity:List*",
+                "cognito-idp:Describe*",
+                "cognito-idp:AdminGetDevice",
+                "cognito-idp:AdminGetUser",
+                "cognito-idp:AdminList*",
+                "cognito-idp:List*",
+                "cognito-sync:Describe*",
+                "cognito-sync:Get*",
+                "cognito-sync:List*",
+                "iam:ListOpenIdConnectProviders",
+                "iam:ListRoles",
+                "sns:ListPlatformApplications"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:cognito-idp:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":userpool/",
+                      {
+                        "Ref": "authlearn1da44e1cfUserPoolId"
+                      }
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
                 "dynamodb:Get*",
                 "dynamodb:BatchGetItem",
                 "dynamodb:List*",
@@ -229,7 +302,7 @@
                       ":table/",
                       {
                         "Fn::ImportValue": {
-                          "Fn::Sub": "${apilearn1GraphQLAPIIdOutput}:GetAtt:ItemTable:Name"
+                          "Fn::Sub": "${apilearn1GraphQLAPIIdOutput}:GetAtt:EntryTable:Name"
                         }
                       }
                     ]
@@ -250,7 +323,63 @@
                       ":table/",
                       {
                         "Fn::ImportValue": {
-                          "Fn::Sub": "${apilearn1GraphQLAPIIdOutput}:GetAtt:ItemTable:Name"
+                          "Fn::Sub": "${apilearn1GraphQLAPIIdOutput}:GetAtt:EntryTable:Name"
+                        }
+                      },
+                      "/index/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:Get*",
+                "dynamodb:BatchGetItem",
+                "dynamodb:List*",
+                "dynamodb:Describe*",
+                "dynamodb:Scan",
+                "dynamodb:Query"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":table/",
+                      {
+                        "Fn::ImportValue": {
+                          "Fn::Sub": "${apilearn1GraphQLAPIIdOutput}:GetAtt:NoteTable:Name"
+                        }
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":table/",
+                      {
+                        "Fn::ImportValue": {
+                          "Fn::Sub": "${apilearn1GraphQLAPIIdOutput}:GetAtt:NoteTable:Name"
                         }
                       },
                       "/index/*"

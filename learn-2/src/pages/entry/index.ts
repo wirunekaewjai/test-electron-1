@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import { Auth } from '@aws-amplify/auth';
 import { DataStore, OpType } from '@aws-amplify/datastore';
 import { Entry } from '../..//models';
 

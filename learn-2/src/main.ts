@@ -1,14 +1,12 @@
 import Vue from 'vue';
 import App from './app/index.vue';
-import Amplify, { Hub } from '@aws-amplify/core';
-import Auth, { CognitoUser } from '@aws-amplify/auth';
+import { Amplify, Hub } from '@aws-amplify/core';
+import { Auth, CognitoUser } from '@aws-amplify/auth';
 import { DataStore } from '@aws-amplify/datastore';
 
 import config from './aws-exports';
 
 Vue.config.productionTip = false;
-
-Amplify.configure(config);
 
 async function getUser ()
 {
@@ -42,40 +40,50 @@ new Vue({
   },
 
   created: async function () {
-    this.user = await getUser();
-  },
+    Hub.listen('auth', async (e) => {
+      const event = e.payload.event;
 
-  mounted: async function () {
-    window.ipcRenderer.on('set', async (_, key: string, value: any) => {
-      if (key === 'state')
+      // console.log('hub:auth', event);
+
+      if (event === 'configured')
       {
-        if (value === 'signed-out')
-        {
-          this.state = 'authentication';
-          this.page = 'entries';
-          this.props = undefined;
-          this.user = undefined;
-
-          await DataStore.stop();
-          await DataStore.clear();
-
-          await Auth.signOut();
-        }
-        else if (value === 'signed-in')
+        this.user = await getUser();
+        
+        if (this.user)
         {
           this.state = 'signed-in';
-
-          if (!this.user)
-          {
-            this.user = await getUser();
-          }
-
           await DataStore.start();
         }
         else
         {
-          this.state = value;
+          this.state = 'authentication';
         }
+      }
+      else if (event === 'signIn')
+      {
+        this.user = await getUser();
+        this.state = 'signed-in';
+
+        await DataStore.start();
+      }
+      else if (event === 'signOut')
+      {
+        await DataStore.stop();
+
+        this.state = 'authentication';
+        this.page = 'entries';
+        this.props = undefined;
+        this.user = undefined;
+      }
+    });
+
+    Hub.listen('datastore', (e) =>
+    {
+      // console.log('hub:datastore', e.payload.event);
+
+      if (e.payload.event === 'ready' && this.state === 'signed-in')
+      {
+        this.state = 'ready';
       }
     });
 
@@ -84,30 +92,25 @@ new Vue({
       this.props = props;
     });
 
-    Hub.listen('datastore', (e) =>
-    {
-      // console.log(e.payload.event);
-
-      if (e.payload.event === 'ready' && this.state === 'signed-in')
-      {
-        this.state = 'ready';
-      }
-    });
-
-    if (this.user)
-    {
-      if (this.state !== 'signed-in')
-      {
-        window.ipcRenderer.send('set', 'state', 'signed-in');
-      }
-    }
-    else if (this.state !== 'authentication')
-    {
-      window.ipcRenderer.send('set', 'state', 'authentication');
-    }
+    Amplify.configure(config);
   },
 
+  // mounted: async function () {
+  //   // if (this.user)
+  //   // {
+  //   //   if (this.state !== 'signed-in')
+  //   //   {
+  //   //     window.ipcRenderer.send('set', 'state', 'signed-in');
+  //   //   }
+  //   // }
+  //   // else if (this.state !== 'authentication')
+  //   // {
+  //   //   window.ipcRenderer.send('set', 'state', 'authentication');
+  //   // }
+  // },
+
   render: function (h) {
+    // console.log(this.state, this.page, this.props, this.user);
     return h(App, {
       props: {
         state: this.state,

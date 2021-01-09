@@ -13,19 +13,20 @@ export enum AttributeTypes {
   NULL = "_null"
 }
 
-export declare class ItemConnection {
-  readonly items?: (Item | null)[];
+export declare class NoteConnection {
+  readonly items?: (Note | null)[];
   readonly nextToken?: string;
-  constructor(init: ModelInit<ItemConnection>);
+  constructor(init: ModelInit<NoteConnection>);
 }
 
-export declare class Item {
+export declare class Note {
   readonly id: string;
-  readonly name: string;
+  readonly message: string;
   readonly createdAt: string;
   readonly updatedAt: string;
-  constructor(init: ModelInit<Item>);
-  static copyOf(source: Item, mutator: (draft: MutableModel<Item>) => MutableModel<Item> | void): Item;
+  readonly entry: Entry;
+  constructor(init: ModelInit<Note>);
+  static copyOf(source: Note, mutator: (draft: MutableModel<Note>) => MutableModel<Note> | void): Note;
 }
 
 export declare class Entry {
@@ -34,17 +35,7 @@ export declare class Entry {
   readonly description?: string;
   readonly createdAt: string;
   readonly updatedAt: string;
+  readonly notes: Note[];
   constructor(init: ModelInit<Entry>);
   static copyOf(source: Entry, mutator: (draft: MutableModel<Entry>) => MutableModel<Entry> | void): Entry;
-}
-
-export declare class List {
-  readonly id: string;
-  readonly name: string;
-  readonly description?: string;
-  readonly createdAt: string;
-  readonly updatedAt: string;
-  readonly owners: string[];
-  constructor(init: ModelInit<List>);
-  static copyOf(source: List, mutator: (draft: MutableModel<List>) => MutableModel<List> | void): List;
 }

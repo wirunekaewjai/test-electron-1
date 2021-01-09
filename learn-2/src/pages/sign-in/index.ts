@@ -86,7 +86,7 @@ export default Vue.extend({
       }
       else
       {
-        window.ipcRenderer.send('set', 'state', 'signed-in');
+        // window.ipcRenderer.send('set', 'state', 'signed-in');
         // window.ipcRenderer.send('navigate', this.page, this.props);
       }
     },

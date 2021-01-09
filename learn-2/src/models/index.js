@@ -15,12 +15,11 @@ const AttributeTypes = {
   "NULL": "_null"
 };
 
-const { Item, Entry, List, ItemConnection } = initSchema(schema);
+const { Note, Entry, NoteConnection } = initSchema(schema);
 
 export {
-  Item,
+  Note,
   Entry,
-  List,
   AttributeTypes,
-  ItemConnection
+  NoteConnection
 };

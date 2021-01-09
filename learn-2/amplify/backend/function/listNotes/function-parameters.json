@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "auth": {
+      "learn1da44e1cf": [
+        "read"
+      ]
+    },
+    "storage": {
+      "Entry:@model(appsync)": [
+        "read"
+      ],
+      "Note:@model(appsync)": [
+        "read"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

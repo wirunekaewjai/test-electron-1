@@ -1,7 +1,6 @@
 import Vue from 'vue';
-import { Hub } from '@aws-amplify/core';
 import { Auth } from '@aws-amplify/auth';
-import { DataStore, OpType, SortDirection } from '@aws-amplify/datastore';
+import { DataStore, SortDirection, OpType, Predicates } from '@aws-amplify/datastore';
 import { Entry } from '../../models';
 
 import Container from '../../components/container/index.vue';
@@ -18,11 +17,8 @@ const LIMIT = 3;
 
 async function signOut ()
 {
-  // await DataStore.clear();
-  // await Auth.signOut();
-
-  // window.ipcRenderer.send('navigate', 'entries');
-  window.ipcRenderer.send('set', 'state', 'signed-out');
+  await Auth.signOut();
+  // window.ipcRenderer.send('set', 'state', 'signed-out');
 }
 
 export default Vue.extend({
@@ -50,55 +46,15 @@ export default Vue.extend({
   },
 
   mounted: async function () {
-    
-    // if (!this.ready)
-    // {
-    //   await this.init();
-    //   this.ready = true;
-    // }
-
     await this.load();
-
     this.subscribe();
   },
 
   beforeDestroy: async function () {
     this.unsubscribe();
-
-    // for (const removeListener of this.removeListeners)
-    // {
-    //   removeListener?.();
-    // }
-
-    // await DataStore.stop();
   },
 
   methods: {
-    // init: async function () {
-    //   await this.listen();
-    // },
-
-    // listen: function () {
-    //   return new Promise (resolve => {
-    //     const removeListener = Hub.listen('datastore', (e) =>
-    //     {
-    //       if (e.payload.event === 'ready')
-    //       {
-    //         resolve(undefined);
-    //       }
-    //       // else
-    //       // {
-    //         console.log(e.payload.event);
-    //       // }
-    //     });
-
-    //     if (removeListener)
-    //     {
-    //       this.removeListeners.push(removeListener);
-    //     }
-    //   });
-    // },
-
     load: async function (after?: Entry) {
       this.loading = true;
 
@@ -159,16 +115,17 @@ export default Vue.extend({
         }
       });
   
-      const sub2 = this.items.length > 0 ? DataStore
+      const after = this.items.length > 0 ? this.items[0].updatedAt : new Date().toISOString();
+      const sub2 = DataStore
       .observe(Entry, e => {
-        return e.updatedAt('gt', this.items[0].updatedAt);
+        return e.updatedAt('gt', after);
       })
       .subscribe(async (msg) => {
         if (msg.opType === OpType.INSERT)
         {
           this.items = [msg.element,  ...this.items];
         }
-      }) : undefined;
+      });
 
       if (sub1)
       {
@@ -198,6 +155,7 @@ export default Vue.extend({
         name: this.name,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
+        notes: [],
       }));
 
       this.name = '';

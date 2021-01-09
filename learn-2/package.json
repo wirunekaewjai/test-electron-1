@@ -12,7 +12,8 @@
         "postinstall": "electron-builder install-app-deps",
         "postuninstall": "electron-builder install-app-deps",
         "amplify-modelgen": "node amplify/scripts/amplify-modelgen.js",
-        "amplify-push": "node amplify/scripts/amplify-push.js"
+        "amplify-push": "node amplify/scripts/amplify-push.js",
+        "amplify-app": "npx amplify-app@latest --use-yarn"
     },
     "main": "background.js",
     "dependencies": {
