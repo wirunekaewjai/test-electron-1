@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Auth } from '@aws-amplify/auth';
-import { DataStore, SortDirection, OpType, Predicates } from '@aws-amplify/datastore';
+import { DataStore, SortDirection, OpType } from '@aws-amplify/datastore';
 import { Entry } from '../../models';
 
 import Container from '../../components/container/index.vue';
@@ -155,7 +155,6 @@ export default Vue.extend({
         name: this.name,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        notes: [],
       }));
 
       this.name = '';

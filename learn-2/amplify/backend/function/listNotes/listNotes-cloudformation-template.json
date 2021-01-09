@@ -135,7 +135,7 @@
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-learn1-dev-135712-deployment",
-          "S3Key": "amplify-builds/listNotes-43337644514657455575-build.zip"
+          "S3Key": "amplify-builds/listNotes-554833644b3076424b4b-build.zip"
         }
       }
     },

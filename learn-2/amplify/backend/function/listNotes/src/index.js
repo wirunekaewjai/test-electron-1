@@ -14,11 +14,11 @@ exports.handler = async (event) =>
     console.log(JSON.stringify(event, null, 2));
 
     return {
-        nextToken: '12345',
         items: [
             {
+                entryID: 'ec60fcf5-073b-45e0-a9a0-2657888d530d',
                 id: '1',
-                name: 'eiei',
+                message: 'eiei',
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
             }

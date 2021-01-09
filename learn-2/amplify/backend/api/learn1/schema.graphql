@@ -10,7 +10,8 @@ type Entry
         allow: groups,
         groups: [
           "Admin",
-          "Editor"
+          "Editor",
+          "External"
         ],
         operations: [update]
       },
@@ -30,116 +31,119 @@ type Entry
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
 
-  notes: [Note!]! @connection(keyName: "byEntry", fields: ["id"])
+  # notes: [Note!]! @connection(keyName: "byEntry", fields: ["id"])
 }
 
-type Note
-  @model(
-    queries: null
-  )
-  @key(name: "byEntry", fields: ["entryID", "message", "createdAt", "updatedAt"])
-  @auth(
-    rules: [
-      {
-        allow: private,
-        operations: [read]
-      },
-      {
-        allow: groups,
-        groups: [
-          "Admin",
-          "Editor"
-        ],
-        operations: [update]
-      },
-      {
-        allow: groups,
-        groups: [
-          "Admin"
-        ],
-        operations: [create, delete]
-      },
-    ]
-  )
-{
-  id: ID!
-  message: String!
-  createdAt: AWSDateTime!
-  updatedAt: AWSDateTime!
-  entryID: ID!
-  entry: Entry! @connection(fields: ["entryID"])
-}
+# type Note
+#   @model(
+#     queries: null,
+#     mutations: null,
+#     subscriptions: null
+#   )
+#   # @key(name: "byEntry", fields: ["entryID", "message", "createdAt", "updatedAt"])
+#   @auth(
+#     rules: [
+#       {
+#         allow: private,
+#         operations: [read]
+#       },
+#       {
+#         allow: groups,
+#         groups: [
+#           "Admin",
+#           "Editor"
+#         ],
+#         operations: [update]
+#       },
+#       {
+#         allow: groups,
+#         groups: [
+#           "Admin"
+#         ],
+#         operations: [create, delete]
+#       },
+#     ]
+#   )
+# {
+#   id: ID!
+#   message: String!
+#   createdAt: AWSDateTime!
+#   updatedAt: AWSDateTime!
+#   # entryID: ID!
+#   # entry: Entry! @connection(fields: ["entryID"])
+# }
 
-type Query {
-  listNotes(entryID: ID!, filter: NoteFilterInput, limit: Int, nextToken: String): NoteConnection @function(name: "listNotes-${env}")
-}
+# type Query {
+#   listNotes(entryID: ID!, filter: NoteFilterInput, limit: Int, nextToken: String): NoteConnection @function(name: "listNotes-${env}")
+#   syncNotes(entryID: ID!, filter: NoteFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): NoteConnection @function(name: "listNotes-${env}")
+# }
 
-type NoteConnection {
-  items: [Note]
-  nextToken: String
-}
+# type NoteConnection {
+#   items: [Note]
+#   nextToken: String
+# }
 
-input NoteFilterInput {
-  id: IDInput
-  name: StringInput
-  createdAt: StringInput
-  updatedAt: StringInput
-  and: [NoteFilterInput]
-  or: [NoteFilterInput]
-  not: NoteFilterInput
-}
+# input NoteFilterInput {
+#   id: IDInput
+#   name: StringInput
+#   createdAt: StringInput
+#   updatedAt: StringInput
+#   and: [NoteFilterInput]
+#   or: [NoteFilterInput]
+#   not: NoteFilterInput
+# }
 
-input IDInput {
-  ne: ID
-  eq: ID
-  le: ID
-  lt: ID
-  ge: ID
-  gt: ID
-  contains: ID
-  notContains: ID
-  between: [ID]
-  beginsWith: ID
-  attributeExists: Boolean
-  attributeType: AttributeTypes
-  size: SizeInput
-}
+# input IDInput {
+#   ne: ID
+#   eq: ID
+#   le: ID
+#   lt: ID
+#   ge: ID
+#   gt: ID
+#   contains: ID
+#   notContains: ID
+#   between: [ID]
+#   beginsWith: ID
+#   attributeExists: Boolean
+#   attributeType: AttributeTypes
+#   size: SizeInput
+# }
 
-input StringInput {
-  ne: String
-  eq: String
-  le: String
-  lt: String
-  ge: String
-  gt: String
-  contains: String
-  notContains: String
-  between: [String]
-  beginsWith: String
-  attributeExists: Boolean
-  attributeType: AttributeTypes
-  size: SizeInput
-}
+# input StringInput {
+#   ne: String
+#   eq: String
+#   le: String
+#   lt: String
+#   ge: String
+#   gt: String
+#   contains: String
+#   notContains: String
+#   between: [String]
+#   beginsWith: String
+#   attributeExists: Boolean
+#   attributeType: AttributeTypes
+#   size: SizeInput
+# }
 
-input SizeInput {
-  ne: Int
-  eq: Int
-  le: Int
-  lt: Int
-  ge: Int
-  gt: Int
-  between: [Int]
-}
+# input SizeInput {
+#   ne: Int
+#   eq: Int
+#   le: Int
+#   lt: Int
+#   ge: Int
+#   gt: Int
+#   between: [Int]
+# }
 
-enum AttributeTypes {
-  binary
-  binarySet
-  bool
-  list
-  map
-  number
-  numberSet
-  string
-  stringSet
-  _null
-}
+# enum AttributeTypes {
+#   binary
+#   binarySet
+#   bool
+#   list
+#   map
+#   number
+#   numberSet
+#   string
+#   stringSet
+#   _null
+# }
