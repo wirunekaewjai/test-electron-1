@@ -24,27 +24,5 @@
       "customAuth": false
     }
   },
-  "function": {
-    "listNotes": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "auth",
-          "resourceName": "learn1da44e1cf",
-          "attributes": [
-            "UserPoolId"
-          ]
-        },
-        {
-          "category": "api",
-          "resourceName": "learn1",
-          "attributes": [
-            "GraphQLAPIIdOutput"
-          ]
-        }
-      ]
-    }
-  }
+  "function": {}
 }
