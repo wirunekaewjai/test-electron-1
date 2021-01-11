@@ -1,0 +1,11 @@
+{
+  "auth": {
+    "learn398d2f25f": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  },
+  "api": {}
+}
