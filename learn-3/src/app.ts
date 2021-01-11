@@ -1,13 +1,28 @@
 import Vue from 'vue';
+
 import { Route, NavigationGuardNext } from 'vue-router';
 import { mapState, mapMutations } from 'vuex';
 
-const authRoutes = ['/sign-in', '/sign-up', '/forgot-password'];
+import { Hub } from '@aws-amplify/core';
+import { Auth } from '@aws-amplify/auth';
+
+import config from './aws-exports';
+
+import CommonSnackbar from '@/components/common-snackbar/template.vue';
+
+const authRoutes = [
+  '/sign-in', 
+  '/sign-up', 
+  '/forgot-password',
+];
 
 export default Vue.extend({
+  components: {
+    CommonSnackbar,
+  },
+
   data: () => ({
-    // ready: false,
-    // unsubscribes: [] as Function[],
+    unsubscribes: [] as Function[],
   }),
 
   computed: {
@@ -17,57 +32,127 @@ export default Vue.extend({
   methods: {
     ...mapMutations(['setReady']),
 
-    ...mapMutations('user', {
-      notifyUserChanged: 'notifyChanged',
-    }),
+    onRouteBeforeEach (to: Route, from: Route, next: NavigationGuardNext) {
+      // console.log(from.fullPath, to.fullPath);
 
-    // onRouteBeforeEach (to: Route, _: Route, next: NavigationGuardNext) {
-    //   if (!this.ready)
-    //   {
-    //     next();
-    //     return;
-    //   }
+      if (!this.ready) {
+        next();
+        return;
+      }
 
-    //   const user = firebase.auth().currentUser;
-    //   const isToAuthRoute = authRoutes.includes(to.path);
+      const isToAuthRoute = authRoutes.includes(to.path);
 
-    //   if (user)
-    //   {
-    //     if (isToAuthRoute)
-    //     {
-    //       if (typeof to.query.redirect === 'string' && to.query.redirect.length > 0)
-    //       {
-    //         next(decodeURIComponent(to.query.redirect));
-    //       }
-    //       else
-    //       {
-    //         next('/');
-    //       }
-    //     }
-    //     else
-    //     {
-    //       next();
-    //     }
-    //   }
-    //   else if (!isToAuthRoute)
-    //   {
-    //     next({
-    //       path: '/sign-in',
-    //       query: {
-    //         redirect: encodeURIComponent(to.fullPath),
-    //       },
-    //     });
-    //   }
-    //   else
-    //   {
-    //     next();
-    //   }
-    // },
+      Auth
+      .currentAuthenticatedUser()
+      .then(() => {
+        if (isToAuthRoute) {
+          if (typeof to.query.redirect === 'string' && to.query.redirect.length > 0)
+          {
+            next(decodeURIComponent(to.query.redirect));
+          }
+          else
+          {
+            next('/');
+          }
+        }
+        else {
+          next();
+        }
+      })
+      .catch(() => {
+        if (!isToAuthRoute)
+        {
+          next({
+            path: '/sign-in',
+            query: {
+              redirect: encodeURIComponent(to.fullPath),
+            },
+          });
+        }
+        else
+        {
+          next();
+        }
+      });
+    },
 
+    onAuthStateChanged () {
+      const router = this.$router;
+      const route = router.currentRoute;
+
+      const inAuthRoute = authRoutes.includes(route.path);
+
+      Auth
+      .currentAuthenticatedUser()
+      .then(user => {
+        if (inAuthRoute) {
+          if (typeof route.query.redirect === 'string' && route.query.redirect.length > 0)
+          {
+            router.push({
+              path: decodeURIComponent(route.query.redirect),
+            });
+          }
+          else
+          {
+            router.push({
+              path: '/',
+            });
+          }
+        }
+      })
+      .catch(() => {
+        if (!inAuthRoute) {
+          router.push({
+            path: '/sign-in',
+            query: {
+              redirect: encodeURIComponent(route.fullPath),
+            },
+          });
+        }
+      })
+      .finally(() => {
+        this.setReady();
+      });
+    },
   },
 
   mounted () {
-    // this.$router.beforeEach(this.onRouteBeforeEach);
-    
+    this.$router.beforeEach(this.onRouteBeforeEach);
+
+    this.unsubscribes.push(
+      Hub.listen('auth', (cap) => {
+        const event = cap.payload.event;
+        console.log('auth:', event);
+
+        if (event === 'configured') {
+          this.onAuthStateChanged();
+        }
+        else if (event === 'signIn')
+        {
+          this.onAuthStateChanged();
+        }
+        else if (event === 'signOut')
+        {
+          this.onAuthStateChanged();
+        }
+      })
+    );
+
+    // this.unsubscribes.push(
+    //   Hub.listen('datastore', (e) => {
+    //     console.log('datastore:', e.payload.event);
+    //   })
+    // );
+
+    // Amplify.configure(config);
+    Auth.configure(config);
+  },
+
+  beforeDestroy () {
+    for (const unsubscribe of this.unsubscribes) {
+      if (typeof unsubscribe === 'function') {
+        unsubscribe();
+      }
+    }
   },
 });

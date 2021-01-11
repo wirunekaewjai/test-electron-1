@@ -5,6 +5,7 @@
       v-else
       type="article"
     />
+    <CommonSnackbar />
   </v-app>
 </template>
 
