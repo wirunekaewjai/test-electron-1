@@ -1,10 +1,10 @@
 <template>
-  <v-app>
-    <router-view v-if="ready" />
-    <v-skeleton-loader
+  <v-app v-if="ready" >
+    <router-view />
+    <!-- <v-skeleton-loader
       v-else
       type="article"
-    />
+    /> -->
     <CommonSnackbar />
   </v-app>
 </template>

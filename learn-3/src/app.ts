@@ -84,7 +84,7 @@ export default Vue.extend({
 
       Auth
       .currentAuthenticatedUser()
-      .then(user => {
+      .then(async (user) => {
         if (inAuthRoute) {
           if (typeof route.query.redirect === 'string' && route.query.redirect.length > 0)
           {
@@ -114,27 +114,51 @@ export default Vue.extend({
         this.setReady();
       });
     },
+
+    async onValidateCustomTheme () {
+      console.log('theme: validate');
+
+      try {
+        const user = await Auth.currentAuthenticatedUser();
+        const attrs = await Auth.userAttributes(user);
+
+        for (const attr of attrs) {
+          if (attr.Name === 'custom:theme') {
+            this.$vuetify.theme.dark = attr.Value === 'dark';
+          }
+        }
+      }
+      catch {
+        this.$vuetify.theme.dark = false;
+      }
+    }
   },
 
   mounted () {
     this.$router.beforeEach(this.onRouteBeforeEach);
 
     this.unsubscribes.push(
-      Hub.listen('auth', (cap) => {
+      Hub.listen('auth', async (cap) => {
         const event = cap.payload.event;
         console.log('auth:', event);
 
         if (event === 'configured') {
+          await this.onValidateCustomTheme();
           this.onAuthStateChanged();
         }
         else if (event === 'signIn')
         {
+          await this.onValidateCustomTheme();
           this.onAuthStateChanged();
         }
         else if (event === 'signOut')
         {
+          this.$vuetify.theme.dark = false;
           this.onAuthStateChanged();
         }
+        // else if (event === 'tokenRefresh') {
+        //   await this.onValidateCustomTheme();
+        // }
       })
     );
 
