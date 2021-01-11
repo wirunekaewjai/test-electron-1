@@ -1,0 +1,14 @@
+$body-font-family: 'Roboto', Helvetica, Arial, serif !default;
+$border-radius-root: 8px !default;
+
+.slide-fade-enter-active {
+  transition: all .6s ease;
+}
+.slide-fade-leave-active {
+  transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+
+.slide-fade-enter, .slide-fade-leave-to {
+  transform: translateX(10px);
+  opacity: 0;
+}
