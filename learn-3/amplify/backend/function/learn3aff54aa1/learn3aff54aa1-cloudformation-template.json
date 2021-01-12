@@ -9,6 +9,14 @@
     },
     "env": {
       "Type": "String"
+    },
+    "apilearn3GraphQLAPIIdOutput": {
+      "Type": "String",
+      "Default": "apilearn3GraphQLAPIIdOutput"
+    },
+    "apilearn3GraphQLAPIEndpointOutput": {
+      "Type": "String",
+      "Default": "apilearn3GraphQLAPIEndpointOutput"
     }
   },
   "Conditions": {
@@ -55,6 +63,12 @@
             },
             "REGION": {
               "Ref": "AWS::Region"
+            },
+            "API_LEARN3_GRAPHQLAPIIDOUTPUT": {
+              "Ref": "apilearn3GraphQLAPIIdOutput"
+            },
+            "API_LEARN3_GRAPHQLAPIENDPOINTOUTPUT": {
+              "Ref": "apilearn3GraphQLAPIEndpointOutput"
             }
           }
         },
@@ -69,7 +83,7 @@
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-learn3-abc-174222-deployment",
-          "S3Key": "amplify-builds/learn3aff54aa1-6f773666506f4a30426b-build.zip"
+          "S3Key": "amplify-builds/learn3aff54aa1-39526777687630342b57-build.zip"
         }
       }
     },
@@ -150,6 +164,54 @@
                   }
                 ]
               }
+            }
+          ]
+        }
+      }
+    },
+    "AmplifyResourcesPolicy": {
+      "DependsOn": [
+        "LambdaExecutionRole"
+      ],
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "amplify-lambda-execution-policy",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "appsync:Get*",
+                "appsync:List*"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:appsync:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":apis/",
+                      {
+                        "Ref": "apilearn3GraphQLAPIIdOutput"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
             }
           ]
         }
