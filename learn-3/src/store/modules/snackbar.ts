@@ -1,29 +1,19 @@
-// import Store from 'electron-store';
+type State = {
+  message: string;
+};
 
-export default function create () {
-  const states = {
-    message: '',
-  };
-  
-  const mutations = {
-    show (state: typeof states, message: string) {
-      state.message = message;
-    },
+const state = {
+  message: '',
+};
 
-    // setOpen (state: typeof states, open: boolean) {
-    //   state.open = open;
-    //   console.log('snackbar:', open);
-    // },
-  
-    // setMessage (state: typeof states, message: string = '') {
-    //   state.message = message;
-    //   console.log('snackbar:', message);
-    // },
-  };
-  
-  return {
-    namespaced: true,
-    states,
-    mutations,
-  };
-}
+const mutations = {
+  show (state: State, message: string) {
+    state.message = message;
+  },
+};
+
+export default {
+  namespaced: true,
+  state,
+  mutations,
+};

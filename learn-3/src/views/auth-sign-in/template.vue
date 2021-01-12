@@ -51,7 +51,7 @@
                   outlined
                 />
               </v-col>
-              <v-col cols="auto" >
+              <!-- <v-col cols="auto" >
                 <router-link :to="{ path: '/forgot-password', query: $route.query }" >
                   <v-btn
                     :disabled="submitting"
@@ -62,7 +62,7 @@
                     Forgot Password?
                   </v-btn>
                 </router-link>
-              </v-col>
+              </v-col> -->
             </v-row>
           </v-col>
         </v-row>

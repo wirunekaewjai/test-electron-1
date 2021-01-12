@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex, { createLogger } from 'vuex';
 // import Store from 'electron-store';
 
+import auth from './modules/auth';
 import snackbar from './modules/snackbar';
 
 Vue.use(Vuex);
@@ -9,17 +10,23 @@ Vue.use(Vuex);
 // const store = new Store();
 
 export default new Vuex.Store({
-  // strict: process.env.NODE_ENV !== 'production',
+  strict: process.env.NODE_ENV !== 'production',
   state: {
-    ready: false,
+    status: 'none',
+    // authentication: false,
+    // datastore: false,
   },
   mutations: {
-    setReady (state) {
-      state.ready = true;
+    setStatus (state, status: string) {
+      state.status = status;
     },
+    // setReady (state, type: 'authentication' | 'datastore') {
+    //   state[type] = true;
+    // },
   },
   modules: {
-    snackbar: snackbar(),
+    auth,
+    snackbar,
   },
   plugins: [
     createLogger(),

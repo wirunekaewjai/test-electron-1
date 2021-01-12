@@ -3,8 +3,9 @@ import Vue from 'vue';
 import { Route, NavigationGuardNext } from 'vue-router';
 import { mapState, mapMutations } from 'vuex';
 
-import { Hub } from '@aws-amplify/core';
+import { Amplify, Hub } from '@aws-amplify/core';
 import { Auth } from '@aws-amplify/auth';
+import { DataStore } from '@aws-amplify/datastore';
 
 import config from './aws-exports';
 
@@ -26,16 +27,17 @@ export default Vue.extend({
   }),
 
   computed: {
-    ...mapState(['ready']),
+    ...mapState(['status']),
   },
 
   methods: {
-    ...mapMutations(['setReady']),
+    ...mapMutations(['setStatus']),
+    ...mapMutations('auth', { updateUser: 'update' }),
 
     onRouteBeforeEach (to: Route, from: Route, next: NavigationGuardNext) {
       // console.log(from.fullPath, to.fullPath);
 
-      if (!this.ready) {
+      if (!['authenticating', 'ready'].includes(this.status)) {
         next();
         return;
       }
@@ -84,7 +86,9 @@ export default Vue.extend({
 
       Auth
       .currentAuthenticatedUser()
-      .then(async (user) => {
+      .then(async () => {
+        await this.onValidateUser();
+
         if (inAuthRoute) {
           if (typeof route.query.redirect === 'string' && route.query.redirect.length > 0)
           {
@@ -99,6 +103,18 @@ export default Vue.extend({
             });
           }
         }
+
+        this.setStatus('authenticated');
+
+        if (this.status !== 'ready')
+        {
+          try {
+            await DataStore.start();
+          }
+          catch (err) {
+            console.log(err);
+          }
+        }
       })
       .catch(() => {
         if (!inAuthRoute) {
@@ -109,10 +125,35 @@ export default Vue.extend({
             },
           });
         }
-      })
-      .finally(() => {
-        this.setReady();
+
+        this.setStatus('authenticating');
       });
+      // .finally(() => {
+      //   // this.setReady('authentication');
+      // });
+    },
+
+    async onValidateUser () {
+      console.log('user: validate');
+
+      const user = await Auth.currentAuthenticatedUser();
+      const attrs = await Auth.userAttributes(user);
+
+      const payload = {
+        name: '',
+        email: '',
+      };
+
+      for (const attr of attrs) {
+        if (attr.Name === 'name') {
+          payload.name = attr.Value;
+        }
+        else if (attr.Name === 'email') {
+          payload.email = attr.Value;
+        }
+      }
+
+      this.updateUser(payload);
     },
 
     async onValidateCustomTheme () {
@@ -144,15 +185,20 @@ export default Vue.extend({
 
         if (event === 'configured') {
           await this.onValidateCustomTheme();
+
           this.onAuthStateChanged();
         }
         else if (event === 'signIn')
         {
+          await DataStore.clear();
           await this.onValidateCustomTheme();
+          
           this.onAuthStateChanged();
         }
         else if (event === 'signOut')
         {
+          await DataStore.clear();
+          
           this.$vuetify.theme.dark = false;
           this.onAuthStateChanged();
         }
@@ -162,14 +208,20 @@ export default Vue.extend({
       })
     );
 
-    // this.unsubscribes.push(
-    //   Hub.listen('datastore', (e) => {
-    //     console.log('datastore:', e.payload.event);
-    //   })
-    // );
+    this.unsubscribes.push(
+      Hub.listen('datastore', (e) => {
+        console.log('datastore:', e.payload.event);
 
-    // Amplify.configure(config);
-    Auth.configure(config);
+        if (e.payload.event === 'ready') {
+          this.setStatus('ready');
+        }
+      })
+    );
+
+    // Auth.configure(config);
+
+    // Amplify.Logger.LOG_LEVEL = 'DEBUG';
+    Amplify.configure(config);
   },
 
   beforeDestroy () {

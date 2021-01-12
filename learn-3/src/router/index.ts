@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import ViewHome from '@/views/home/template.vue';
+import ViewWallets from '@/views/wallets/template.vue';
+import ViewWallet from '@/views/wallet/template.vue';
 
 import ViewAuthSignIn from '@/views/auth-sign-in/template.vue';
 import ViewAuthSignUp from '@/views/auth-sign-up/template.vue';
@@ -11,8 +12,15 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: ViewHome,
+    name: 'wallets',
+    component: ViewWallets,
+    alias: '/wallets',
+  },
+
+  {
+    path: '/wallets/:walletID',
+    name: 'wallet',
+    component: ViewWallet,
   },
 
   {

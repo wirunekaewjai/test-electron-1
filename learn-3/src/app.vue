@@ -1,5 +1,5 @@
 <template>
-  <v-app v-if="ready" >
+  <v-app v-if="status === 'authenticating' || status === 'ready'" >
     <router-view />
     <!-- <v-skeleton-loader
       v-else

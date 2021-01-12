@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "auth": {
+      "learn398d2f25f": [
+        "read"
+      ]
+    },
+    "api": {
+      "learn3": [
+        "read"
+      ]
+    },
+    "storage": {
+      "Wallet:@model(appsync)": [
+        "read"
+      ],
+      "Transaction:@model(appsync)": [
+        "read"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}
