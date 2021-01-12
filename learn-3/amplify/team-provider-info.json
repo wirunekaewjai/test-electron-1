@@ -1,19 +1,43 @@
 {
-  "dev": {
+  "staging": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-learn3-dev-113638-authRole",
-      "UnauthRoleArn": "arn:aws:iam::566266528580:role/amplify-learn3-dev-113638-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::566266528580:role/amplify-learn3-dev-113638-authRole",
+      "AuthRoleName": "amplify-amplifyca80d06184ae4-staging-85649-authRole",
+      "UnauthRoleArn": "arn:aws:iam::566266528580:role/amplify-amplifyca80d06184ae4-staging-85649-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::566266528580:role/amplify-amplifyca80d06184ae4-staging-85649-authRole",
       "Region": "ap-southeast-1",
-      "DeploymentBucketName": "amplify-learn3-dev-113638-deployment",
-      "UnauthRoleName": "amplify-learn3-dev-113638-unauthRole",
-      "StackName": "amplify-learn3-dev-113638",
-      "StackId": "arn:aws:cloudformation:ap-southeast-1:566266528580:stack/amplify-learn3-dev-113638/9a0c4ee0-53c6-11eb-b32b-0645f7467404",
+      "DeploymentBucketName": "amplify-amplifyca80d06184ae4-staging-85649-deployment",
+      "UnauthRoleName": "amplify-amplifyca80d06184ae4-staging-85649-unauthRole",
+      "StackName": "amplify-amplifyca80d06184ae4-staging-85649",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:566266528580:stack/amplify-amplifyca80d06184ae4-staging-85649/1b7a2bd0-54b4-11eb-b32b-0645f7467404",
       "AmplifyAppId": "d34j9w75sypnm0"
     },
     "categories": {
       "auth": {
-        "learn398d2f25f": {}
+        "learn3": {}
+      },
+      "function": {
+        "learn3aff54aa1": {}
+      }
+    }
+  },
+  "abc": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-learn3-abc-174222-authRole",
+      "UnauthRoleArn": "arn:aws:iam::566266528580:role/amplify-learn3-abc-174222-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::566266528580:role/amplify-learn3-abc-174222-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-learn3-abc-174222-deployment",
+      "UnauthRoleName": "amplify-learn3-abc-174222-unauthRole",
+      "StackName": "amplify-learn3-abc-174222",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:566266528580:stack/amplify-learn3-abc-174222/dac6c3a0-54c2-11eb-bd01-06bc7ae8b9d0",
+      "AmplifyAppId": "d34j9w75sypnm0"
+    },
+    "categories": {
+      "auth": {
+        "learn3": {}
+      },
+      "function": {
+        "learn3aff54aa1": {}
       }
     }
   }

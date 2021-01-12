@@ -17,6 +17,7 @@
     },
     "main": "background.js",
     "dependencies": {
+        "@aws-amplify/api": "^3.2.17",
         "@aws-amplify/auth": "^3.4.16",
         "@aws-amplify/core": "^3.8.8",
         "@aws-amplify/datastore": "^2.9.2",

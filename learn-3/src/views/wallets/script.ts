@@ -7,6 +7,8 @@ import ConsoleToolbarUserDropdown from '@/components/console-toolbar-user-dropdo
 
 import DialogCreateWallet from '@/components/dialog-create-wallet/template.vue';
 
+import WalletTotal from '@/components/wallet-total/template.vue';
+
 import { Wallet, Transaction } from '@/models';
 
 interface Subscription {
@@ -24,6 +26,8 @@ export default Vue.extend({
     ConsoleToolbarUserDropdown,
 
     DialogCreateWallet,
+
+    WalletTotal,
   },
 
   data: () => ({

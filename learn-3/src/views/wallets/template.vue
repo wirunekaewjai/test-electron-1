@@ -57,7 +57,10 @@
                   </v-btn>
                 </v-card-text>
                 <v-card-text class="text-right" >
-                  0
+                  <WalletTotal
+                    :id="item.id"
+                  >
+                  </WalletTotal>
                 </v-card-text>
               </div>
             </div>

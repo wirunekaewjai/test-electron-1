@@ -1,41 +1,19 @@
-# type Query {
-#   getTotal(walletID: ID!): Float @function(name: "getTotal-${env}")
-# }
-
-type Wallet
-  @model
-  @auth(
-    rules: [
-      {
-        allow: owner
-      }
-    ]
-  )
-{
+type Transaction @model @auth(rules: [{allow: owner}]) {
   id: ID!
-  name: String!
-
-  transactions: [Transaction] @connection(keyName: "byWallet", fields: ["id"])
-
-  createdAt: AWSDateTime!
-  updatedAt: AWSDateTime!
+  message: String!
+  amount: Float!
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+  walletID: ID!
 }
 
-type Transaction
-  @model
-  @key(name: "byWallet", fields: ["walletID"])
-  @auth(
-    rules: [
-      {
-        allow: owner
-      }
-    ]
-  )
-{
+type Wallet @model @auth(rules: [{allow: owner}]) {
   id: ID!
-  amount: Float!
-  message: String
-  walletID: ID!
-  createdAt: AWSDateTime!
-  updatedAt: AWSDateTime!
+  name: String!
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
+
+type Query {
+  total(walletID: ID!): Float! @function(name: "learn3aff54aa1-${env}")
 }

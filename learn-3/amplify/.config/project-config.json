@@ -1,4 +1,7 @@
 {
+    "providers": [
+        "awscloudformation"
+    ],
     "projectName": "learn3",
     "version": "3.0",
     "frontend": "javascript",
@@ -6,12 +9,9 @@
         "framework": "vue",
         "config": {
             "SourceDir": "src",
-            "DistributionDir": "dist",
-            "BuildCommand": "npm run-script build",
-            "StartCommand": "npm run-script serve"
+            "DistributionDir": "dist_electron",
+            "BuildCommand": "yarn electron:build",
+            "StartCommand": "yarn electron:serve"
         }
-    },
-    "providers": [
-        "awscloudformation"
-    ]
+    }
 }

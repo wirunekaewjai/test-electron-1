@@ -26,7 +26,7 @@
     "@aws-amplify/core" "3.8.9"
     axios "0.21.1"
 
-"@aws-amplify/api@3.2.17":
+"@aws-amplify/api@3.2.17", "@aws-amplify/api@^3.2.17":
   version "3.2.17"
   resolved "https://registry.yarnpkg.com/@aws-amplify/api/-/api-3.2.17.tgz#3a77f24a859dc3590d6b7d3111ea104739f63d3b"
   dependencies:

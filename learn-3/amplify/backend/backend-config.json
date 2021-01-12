@@ -1,6 +1,6 @@
 {
   "auth": {
-    "learn398d2f25f": {
+    "learn3": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
@@ -16,36 +16,23 @@
           "defaultAuthentication": {
             "authenticationType": "AMAZON_COGNITO_USER_POOLS",
             "userPoolConfig": {
-              "userPoolId": "authlearn398d2f25f"
+              "userPoolId": "authlearn3"
             }
           },
-          "additionalAuthenticationProviders": []
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ]
         }
       }
     }
   },
   "function": {
-    "getTotal": {
+    "learn3aff54aa1": {
       "build": true,
       "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "auth",
-          "resourceName": "learn398d2f25f",
-          "attributes": [
-            "UserPoolId"
-          ]
-        },
-        {
-          "category": "api",
-          "resourceName": "learn3",
-          "attributes": [
-            "GraphQLAPIIdOutput",
-            "GraphQLAPIEndpointOutput"
-          ]
-        }
-      ]
+      "service": "Lambda"
     }
   }
 }
