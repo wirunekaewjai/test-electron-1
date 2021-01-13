@@ -13,7 +13,8 @@
         "postuninstall": "electron-builder install-app-deps",
         "amplify-modelgen": "node amplify/scripts/amplify-modelgen.js",
         "amplify-push": "node amplify/scripts/amplify-push.js",
-        "amplify-app": "npx amplify-app@latest --use-yarn"
+        "amplify-app": "npx amplify-app@latest --use-yarn",
+        "amplify:computeTotal": "cd amplify/backend/function/computeTotal && tsc && cd -"
     },
     "main": "background.js",
     "dependencies": {

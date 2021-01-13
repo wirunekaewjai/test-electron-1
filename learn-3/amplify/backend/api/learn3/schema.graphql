@@ -15,5 +15,5 @@ type Wallet @model @auth(rules: [{allow: owner}]) {
 }
 
 type Query {
-  total(walletID: ID!): Float! @function(name: "learn3aff54aa1-${env}")
+  total(walletID: ID!): Float! @function(name: "computeTotal-${env}")
 }

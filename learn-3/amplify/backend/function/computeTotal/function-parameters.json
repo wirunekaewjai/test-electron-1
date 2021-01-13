@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "api": {
+      "learn3": [
+        "read"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}
