@@ -37,7 +37,7 @@
           <v-divider></v-divider>
           <v-card-text>
             <v-file-input
-              :rules="rules"
+              :rules="fileRules"
               v-model="file"
               accept="image/png, image/jpeg"
               prepend-icon="mdi-camera"
@@ -53,9 +53,40 @@
             <v-btn
               @click.prevent="upload"
               :disabled="!file"
+              :loading="fileUploading"
               color="primary"
             >
               Upload
+            </v-btn>
+          </v-card-text>
+        </v-card>
+
+        <v-card
+          style="overflow: hidden;"
+          outlined
+        >
+          <v-card-text class="d-flex justify-space-between" >
+            Name
+          </v-card-text>
+          <v-divider></v-divider>
+          <v-card-text>
+            <v-text-field
+              :disabled="nameChanging"
+              :rules="nameRules"
+              v-model="name"
+              hide-details
+              dense
+              outlined
+            />
+          </v-card-text>
+          <v-divider></v-divider>
+          <v-card-text>
+            <v-btn
+              @click.prevent="changeName"
+              :loading="nameChanging"
+              color="primary"
+            >
+              Save
             </v-btn>
           </v-card-text>
         </v-card>

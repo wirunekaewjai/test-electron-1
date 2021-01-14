@@ -20,8 +20,15 @@ export default Vue.extend({
 
   data () {
     return {
+      name: '',
+      nameChanging: false,
+      nameRules: [
+        (name: string) => name.length > 1 || name.length <= 80 || 'Name should be 1 - 80 character(s)',
+      ],
+
       file: undefined as File | undefined,
-      rules: [
+      fileUploading: false,
+      fileRules: [
         (value: File) => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
       ],
     };
@@ -34,7 +41,21 @@ export default Vue.extend({
   methods: {
     ...mapMutations('auth', { updateUser: 'update' }),
 
+    async changeName () {
+      this.nameChanging = true;
+      
+      await new Promise(r => setTimeout(r, 300));
+
+      this.notifyNameChanged(this.name);
+
+      this.nameChanging = false;
+    },
+
     async upload () {
+      this.fileUploading = true;
+
+      const st = Date.now();
+      
       const file = this.file as File;
 
       const session = await Auth.currentSession();
@@ -47,23 +68,44 @@ export default Vue.extend({
           contentType: file.type,
         });
 
-        await this.notify(key);
-
-        const user = await Auth.currentAuthenticatedUser();
-        await Auth.updateUserAttributes(user, { 'custom:photo': key });
+        await this.notifyPhotoChanged(key);
       }
       catch (err) {
         console.log(err);
       }
+
+      const et = Date.now();
+      const usage = et - st;
+
+      if (usage < 300) {
+        await new Promise(r => setTimeout(r, 300 - usage));
+      }
+
+      this.fileUploading = false;
     },
 
-    async notify (key: string) {
+    async notifyPhotoChanged (key: string) {
 
       const payload = { ...this.user };
 
       payload.photo = await Storage.get(key, { level: 'private' }) as string;
 
       this.updateUser(payload);
+
+      const user = await Auth.currentAuthenticatedUser();
+      await Auth.updateUserAttributes(user, { 'custom:photo': key });
     },
+
+    async notifyNameChanged (name: string) {
+
+      this.updateUser({ ...this.user, name });
+
+      const user = await Auth.currentAuthenticatedUser();
+      await Auth.updateUserAttributes(user, { 'name': name });
+    },
+  },
+
+  mounted () {
+    this.name = this.user.name;
   },
 });
