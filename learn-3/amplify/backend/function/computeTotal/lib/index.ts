@@ -5,15 +5,17 @@
 	REGION
 Amplify Params - DO NOT EDIT */
 
-import axios from 'axios';
-import gql from 'graphql-tag';
-import { print } from 'graphql';
-import { Event } from './types';
+import {
+  axios,
+  gql,
+  print,
+
+  Event, Env,
+} from './bundle';
 
 const listTransactions = gql`
   query ListTransactions ($walletID: ID!) {
     listTransactions(filter: {walletID: {eq: $walletID}}) {
-      startedAt
       items {
         amount
       }
@@ -21,21 +23,32 @@ const listTransactions = gql`
   }
 `;
 
-export async function handler (event: Event) {
+export async function handler (event: Event, context: any) {
+  try {
+    console.log(JSON.stringify(context, null, 2));
+  }
+  catch (err) {
+    console.log(err);
+  }
+
+  console.log(JSON.stringify(event, null, 2));
+  console.log(JSON.stringify(process.env, null, 2));
+
   const walletID = event.arguments.walletID;
+  const env = process.env as Env;
   
   try {
     const result = await axios.post(
-      process.env.API_LEARN3_GRAPHQLAPIENDPOINTOUTPUT,
+      env.API_LEARN3_GRAPHQLAPIENDPOINTOUTPUT,
       {
         query: print(listTransactions),
         variables: {
           walletID,
-        },
+        },  
       },
       {
         headers: {
-          // 'x-api-key': process.env.API_LEARN3_GRAPHQLAPIIDOUTPUT,
+          // 'x-api-key': env.API_LEARN3_GRAPHQLAPIIDOUTPUT,
           'authorization': event.request.headers.authorization,
         },
       }

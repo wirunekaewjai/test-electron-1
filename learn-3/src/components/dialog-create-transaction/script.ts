@@ -97,7 +97,7 @@ export default Vue.extend({
       this.submitting = true;
       
       const amount = parseFloat(this.values.amount);
-      const message = this.values.message || amount > 0 ? 'Increase' : 'Decrease';
+      const message = this.values.message.length > 0 ? this.values.message : amount > 0 ? 'Increase' : 'Decrease';
 
       await DataStore.save(
         new Transaction({
