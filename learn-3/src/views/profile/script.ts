@@ -59,9 +59,9 @@ export default Vue.extend({
       const file = this.file as File;
       const level = 'protected';
 
-      const session = await Auth.currentSession();
-      const sub = session.getIdToken().payload['sub'];
-      const key = `/${level}/${sub}/${file.name}`;
+      // const session = await Auth.currentSession();
+      // const sub = session.getIdToken().payload['sub'];
+      const key = `${file.name}`;
 
       try {
         await Storage.put(key, file, {

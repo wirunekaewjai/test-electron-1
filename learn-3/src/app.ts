@@ -154,9 +154,7 @@ export default Vue.extend({
           const key = attr.Value;
 
           if (typeof key === 'string' && key.length > 0) {
-            const level = key.startsWith('/private') ? 'private' : 'protected';
-
-            payload.photo = await Storage.get(key, { level }) as string;
+            payload.photo = await Storage.get(key, { level: 'protected' }) as string;
           }
         }
       }
