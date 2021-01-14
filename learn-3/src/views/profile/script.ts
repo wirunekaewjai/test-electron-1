@@ -57,18 +57,19 @@ export default Vue.extend({
       const st = Date.now();
       
       const file = this.file as File;
+      const level = 'protected';
 
       const session = await Auth.currentSession();
       const sub = session.getIdToken().payload['sub'];
-      const key = `/private/${sub}/${file.name}`;
+      const key = `/${level}/${sub}/${file.name}`;
 
       try {
         await Storage.put(key, file, {
-          level: 'private',
+          level,
           contentType: file.type,
         });
 
-        await this.notifyPhotoChanged(key);
+        await this.notifyPhotoChanged(key, level);
       }
       catch (err) {
         console.log(err);
@@ -84,11 +85,11 @@ export default Vue.extend({
       this.fileUploading = false;
     },
 
-    async notifyPhotoChanged (key: string) {
+    async notifyPhotoChanged (key: string, level: string) {
 
       const payload = { ...this.user };
 
-      payload.photo = await Storage.get(key, { level: 'private' }) as string;
+      payload.photo = await Storage.get(key, { level }) as string;
 
       this.updateUser(payload);
 

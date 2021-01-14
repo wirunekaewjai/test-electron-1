@@ -105,10 +105,10 @@ export default Vue.extend({
           }
         }
 
-        this.setStatus('authenticated');
-
         if (this.status !== 'ready')
         {
+          this.setStatus('authenticated');
+
           try {
             await DataStore.start();
           }
@@ -129,9 +129,6 @@ export default Vue.extend({
 
         this.setStatus('authenticating');
       });
-      // .finally(() => {
-      //   // this.setReady('authentication');
-      // });
     },
 
     async onValidateUser () {
@@ -157,7 +154,9 @@ export default Vue.extend({
           const key = attr.Value;
 
           if (typeof key === 'string' && key.length > 0) {
-            payload.photo = await Storage.get(key, { level: 'private' }) as string;
+            const level = key.startsWith('/private') ? 'private' : 'protected';
+
+            payload.photo = await Storage.get(key, { level }) as string;
           }
         }
       }

@@ -49,13 +49,25 @@ export default Vue.extend({
   methods: {
     async fetch () {
       this.loading = true;
-
+      
       try {
+        const st = Date.now();
         const entry = await DataStore.query(Wallet, this.id);
 
+
         if (entry) {
+          const transactions = await DataStore.query(Transaction, e => e.walletID('eq', this.id), { sort: s => s.createdAt(SortDirection.DESCENDING) });
+
+          const et = Date.now();
+          const usage = et - st;
+
+          if (usage < 300)
+          {
+            await new Promise(r => setTimeout(r, 300 - usage));
+          }
+
           this.name = entry.name;
-          this.transactions = await DataStore.query(Transaction, e => e.walletID('eq', this.id), { sort: s => s.createdAt(SortDirection.DESCENDING) });
+          this.transactions = transactions;
         }
         else {
           this.redirect();

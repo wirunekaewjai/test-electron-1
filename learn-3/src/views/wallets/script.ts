@@ -52,15 +52,26 @@ export default Vue.extend({
       this.loading = true;
 
       try {
-        this.items = await DataStore.query(Wallet, Predicates.ALL, {
+        const st = Date.now();
+        const items = await DataStore.query(Wallet, Predicates.ALL, {
           sort: s => s.name(SortDirection.ASCENDING),
         });
+
+        const et = Date.now();
+        const usage = et - st;
+
+        if (usage < 300)
+        {
+          await new Promise(r => setTimeout(r, 300 - usage));
+        }
+
+        this.items = items;
       }
       catch (err) {
         console.log(err);
       }
 
-      // const st = Date.now();
+      // 
 
       // try {
       //   const entries = await DataStore.query(Wallet, e => {
