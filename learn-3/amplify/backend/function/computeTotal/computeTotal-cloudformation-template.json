@@ -83,7 +83,7 @@
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-learn3-abc-174222-deployment",
-          "S3Key": "amplify-builds/computeTotal-6d56595a667450674a4d-build.zip"
+          "S3Key": "amplify-builds/computeTotal-69476569455244507932-build.zip"
         }
       }
     },

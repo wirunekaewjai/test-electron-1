@@ -13,6 +13,7 @@
         text
       >
         <CommonAvatar
+          :photo="user.photo"
           :name="user.name"
         />
         <v-icon
@@ -27,6 +28,7 @@
         <v-list-item class="px-6" >
           <v-list-item-avatar class="mr-6" >
             <CommonAvatar
+              :photo="user.photo"
               :name="user.name"
               :size="40"
             />
@@ -39,6 +41,21 @@
               {{ user.email }}
             </v-list-item-subtitle>
           </v-list-item-content>
+        </v-list-item>
+
+        <v-divider class="my-3"></v-divider>
+        
+        <v-list-item>
+          <v-btn
+            depressed
+            block
+            rounded
+            text
+            large
+            to="/profile"
+          >
+            Edit Profile
+          </v-btn>
         </v-list-item>
 
         <v-divider class="my-3"></v-divider>

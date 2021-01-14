@@ -59,5 +59,11 @@
         }
       ]
     }
+  },
+  "storage": {
+    "learn3storage": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation"
+    }
   }
 }

@@ -6,6 +6,7 @@ import { mapState, mapMutations } from 'vuex';
 import { Amplify, Hub } from '@aws-amplify/core';
 import { Auth } from '@aws-amplify/auth';
 import { DataStore } from '@aws-amplify/datastore';
+import { Storage } from '@aws-amplify/storage';
 
 import config from './aws-exports';
 
@@ -142,6 +143,7 @@ export default Vue.extend({
       const payload = {
         name: '',
         email: '',
+        photo: '',
       };
 
       for (const attr of attrs) {
@@ -150,6 +152,13 @@ export default Vue.extend({
         }
         else if (attr.Name === 'email') {
           payload.email = attr.Value;
+        }
+        else if (attr.Name === 'custom:photo') {
+          const key = attr.Value;
+
+          if (typeof key === 'string' && key.length > 0) {
+            payload.photo = await Storage.get(key, { level: 'private' }) as string;
+          }
         }
       }
 

@@ -2,6 +2,7 @@
 type User = {
   name: string;
   email: string;
+  photo: string;
 };
 
 type State = {
@@ -12,6 +13,7 @@ const state: State = {
   user: {
     name: '',
     email: '',
+    photo: '',
   },
 };
 

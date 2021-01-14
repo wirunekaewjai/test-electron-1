@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 
 import ViewWallets from '@/views/wallets/template.vue';
 import ViewWallet from '@/views/wallet/template.vue';
+import ViewProfile from '@/views/profile/template.vue';
 
 import ViewAuthSignIn from '@/views/auth-sign-in/template.vue';
 import ViewAuthSignUp from '@/views/auth-sign-up/template.vue';
@@ -24,6 +25,12 @@ const routes = [
   },
 
   {
+    path: '/profile',
+    name: 'profile',
+    component: ViewProfile,
+  },
+
+  {
     path: '/sign-in',
     name: 'auth-sign-in',
     component: ViewAuthSignIn,
@@ -37,7 +44,7 @@ const routes = [
 ];
 
 const router = new VueRouter({
-  routes
+  routes,
 });
 
 export default router;
